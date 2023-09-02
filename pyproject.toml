@@ -196,10 +196,7 @@ pep8-naming.classmethod-decorators = [
 ]
 
 [tool.black]
-extend-exclude = [
-    "versioneer.py",
-    "src/mda_tui/_version.py",
-]
+extend-exclude = "version"
 line-length = 100
 target-version = ["py39", "py310", "py311"]
 
