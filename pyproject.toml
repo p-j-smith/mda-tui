@@ -51,6 +51,9 @@ bugtracker = "https://github.com/p-j-smith/mda-tui/issues"
 usersupport = "https://github.com/p-j-smith/mda-tui/discussions"
 # documentation = "https://mda-tui.readthedocs.io"
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.versioneer]
 VCS = "git"
 style = "pep440"
