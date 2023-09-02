@@ -5,7 +5,7 @@ the `conf.py` file's directory.
 They are copied after the builtin template files,
 so a file named "page.html" will overwrite the builtin "page.html".
 
-The path to this folder is set in the Sphinx `conf.py` file in the line: 
+The path to this folder is set in the Sphinx `conf.py` file in the line:
 ```python
 html_static_path = ['_templates']
 ```

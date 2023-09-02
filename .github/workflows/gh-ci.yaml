@@ -15,7 +15,7 @@ concurrency:
 
 defaults:
   run:
-    shell: bash 
+    shell: bash
 
 jobs:
   test:
@@ -53,7 +53,7 @@ jobs:
         files: coverage.xml
         fail_ci_if_error: true
         verbose: true
-          
+
   twine_check:
     if: "github.repository == 'p-j-smith/mda-tui'"
     needs: test

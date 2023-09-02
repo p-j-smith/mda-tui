@@ -1,16 +1,14 @@
-from typing import Tuple
-
 import MDAnalysis as mda
 from MDAnalysis.coordinates.memory import MemoryReader
 import numpy as np
 
 
 def make_Universe(
-    extras: Tuple[str] = tuple(),
-    size: Tuple[int, int, int] = (125, 25, 5),
+    extras: tuple[str] = (),
+    size: tuple[int, int, int] = (125, 25, 5),
     n_frames: int = 0,
     velocities: bool = False,
-    forces: bool = False
+    forces: bool = False,
 ) -> mda.Universe:
     """Make a dummy reference Universe
 
@@ -49,10 +47,8 @@ def make_Universe(
         n_atoms=n_atoms,
         n_residues=n_residues,
         n_segments=n_segments,
-        atom_resindex=np.repeat(
-            np.arange(n_residues), n_atoms // n_residues),
-        residue_segindex=np.repeat(
-            np.arange(n_segments), n_residues // n_segments),
+        atom_resindex=np.repeat(np.arange(n_residues), n_atoms // n_residues),
+        residue_segindex=np.repeat(np.arange(n_segments), n_residues // n_segments),
         # trajectory things
         trajectory=trajectory,
         velocities=velocities,

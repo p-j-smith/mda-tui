@@ -3,8 +3,6 @@ Unit and regression test for the mda_tui package.
 """
 
 # Import package, test suite, and other packages as needed
-import mda_tui
-import pytest
 import sys
 
 

@@ -92,7 +92,7 @@ Copyright (c) 2023, Paul Smith
 
 
 #### Acknowledgements
- 
-Project based on the 
+
+Project based on the
 [MDAnalysis Cookiecutter](https://github.com/MDAnalysis/cookiecutter-mda) version 0.1.
 Please cite [MDAnalysis](https://github.com/MDAnalysis/mdanalysis#citation) when using MDAnalysis TUI in published work.

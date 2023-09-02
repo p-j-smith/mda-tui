@@ -1,4 +1,4 @@
 Getting Started
 ===============
 
-This page details how to get started with MDAnalysis TUI. 
+This page details how to get started with MDAnalysis TUI.
