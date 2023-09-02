@@ -81,8 +81,8 @@ jobs:
 
     - name: Check package build
       run: |
-        DISTRIBUTION=$(ls -t1 dist/mda_tui-*.tar.gz | head -n 1)
-        test -n "${DISTRIBUTION}" || { echo "no dist/distribution mda_tui-*.tar.gz found"; exit 1; }
+        DISTRIBUTION=$(ls -t1 dist/mda-tui-*.tar.gz | head -n 1)
+        test -n "${DISTRIBUTION}" || { echo "no dist/distribution mda-tui-*.tar.gz found"; exit 1; }
         echo "twine check $DISTRIBUTION"
         twine check $DISTRIBUTION
 
