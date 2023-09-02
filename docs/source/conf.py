@@ -15,8 +15,8 @@
 # Incase the project was not installed
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-import mda-tui  # noqa
+sys.path.insert(0, os.path.abspath('.././src'))
+import mda_tui  # noqa
 
 
 
@@ -31,9 +31,9 @@ copyright = (
 author = 'Paul Smith'
 
 # The short X.Y version
-version = ''
+version = f"v{mda_tui.__version__}"
 # The full version, including alpha/beta/rc tags
-release = ''
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -93,7 +93,10 @@ pygments_style = 'default'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get("READTHEDOCS", None) == "True"
+if not on_rtd:  # only set the theme if we're building docs locally
+    html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
