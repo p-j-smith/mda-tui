@@ -40,7 +40,7 @@ doc = [
     "sphinx_rtd_theme",
 ]
 dev =[
-    "mda-tui[tests,docs]",
+    "mda-tui[test,docs]",
     "pre-commit",
 ]
 
@@ -78,8 +78,8 @@ sort = "cover"
 precision = 2
 omit = [
     ".gitignore",
-    "tests/"
-    "mda_tui/_version.py" # Omit generated versioneer
+    "tests/",
+    "mda_tui/_version.py", # Omit generated versioneer
 ]
 exclude_lines = [
     "pragma: no cover",
@@ -90,8 +90,9 @@ exclude_lines = [
     "if 0:",
     "if __name__ == .__main__.:",
 ]
-exclude_also =
-    if TYPE_CHECKING:
+exclude_also = [
+    "if TYPE_CHECKING:",
+]
 
 [tool.ruff]
 target-version = "py39"
@@ -196,12 +197,4 @@ force-single-line = false
 combine-as-imports = true
 force-sort-within-sections = true
 order-by-type = true
-known-first-party = ["mda-tui"]
-
-
-[build_sphinx]
-all-files = 1
-source-dir = docs/
-build-dir = docs/_build
-warning-is-error = 1
-
+known-first-party = ["mda_tui"]
