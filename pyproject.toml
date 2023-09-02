@@ -1,0 +1,53 @@
+[build-system]
+requires = [
+  "setuptools >= 40.9.0",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mda-tui"
+description = "A textual user interface (TUI) for MDAnalysis"
+license = {file = "LICENSE" }
+authors = [
+    {name = "Paul Smith", email = "paul.j.smith@ucl.ac.uk"},
+]
+maintainers = [
+    {name = "Paul Smith", email = "paul.j.smith@ucl.ac.uk"},
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "MDAnalysis>=2.0.0",
+]
+keywords = [
+    "molecular simulations",
+]
+dynamic = [
+    "version",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=6.0",
+    "pytest-xdist>=2.5",
+    "pytest-cov>=3.0",
+]
+doc = [
+    "sphinx",
+    "sphinx_rtd_theme",
+]
+
+# [project.urls]
+# source = "https://github.com/p-j-smith/mda-tui"
+# documentation = "https://mda-tui.readthedocs.io"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "mda-tui/tests",
+]
+
+[tool.black]
+line-length = 80
+extend-exclude = "versioneer.py"
