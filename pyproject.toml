@@ -16,12 +16,14 @@ maintainers = [
     {name = "Paul Smith", email = "paul.j.smith@ucl.ac.uk"},
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "MDAnalysis>=2.0.0",
+    "textual[all]",
 ]
 keywords = [
     "molecular simulations",
+    "textual user interface",
 ]
 dynamic = [
     "version",
@@ -34,20 +36,172 @@ test = [
     "pytest-cov>=3.0",
 ]
 doc = [
-    "sphinx",
+    "sphinx<7",
     "sphinx_rtd_theme",
 ]
+dev =[
+    "mda-tui[tests,docs]",
+    "pre-commit",
+]
 
-# [project.urls]
-# source = "https://github.com/p-j-smith/mda-tui"
+[project.urls]
+source = "https://github.com/p-j-smith/mda-tui"
+homepage = "https://github.com/p-j-smith/mda-tui"
+bugtracker = "https://github.com/p-j-smith/mda-tui/issues"
+usersupport = "https://github.com/p-j-smith/mda-tui/discussions"
 # documentation = "https://mda-tui.readthedocs.io"
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "src/mda_tui/_version.py"
+versionfile_build = "src/mda_tui/_version.py"
+tag_prefix = ''
+parentdir_prefix = ""
 
 [tool.pytest.ini_options]
 minversion = "6.0"
+addopts = "--color=yes -vv --strict-markers"
 testpaths = [
-    "mda-tui/tests",
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["mda-tui"]
+
+[tool.coverage.report]
+skip_covered = false
+show_missing = true
+sort = "cover"
+precision = 2
+omit = [
+    ".gitignore",
+    "tests/"
+    "mda_tui/_version.py" # Omit generated versioneer
+]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug",
+    "raise NotImplementedError",
+    "except ImportError:",
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+exclude_also =
+    if TYPE_CHECKING:
+
+[tool.ruff]
+target-version = "py39"
+fix = true
+show-fixes = true
+force-exclude = true
+line-length = 100
+select = [
+    "E", "F", "W", # flake8
+    "A",           # flake8-builtins
+    "B", "B904",   # flake8-bugbear
+    "ARG",         # flake8-unused-arguments
+    "C4",          # flake8-comprehensions
+    "COM",         # flake8-commas
+    "DTZ",         # flake8-datetime
+    "EM",          # flake8-errmsg
+    "F",           # pyflakes
+    "I",           # isort
+    "ICN",         # flake8-import-conventions
+    "ISC",         # flake8-implicit-str-concat
+    "G",           # flake8-logging-format
+    "N",           # pep8-naming
+    "PGH",         # pygrep-hooks
+    "PIE",         # flake8-pie
+    "PL",          # pylint
+    "PT",          # flake8-pytest-style
+    "PTH",         # flake8-use-pathlib
+    "Q",           # flake8-quotes
+    "RET",         # flake8-return
+    "RUF",         # Ruff-specific
+    "S",           # flake8-bandit
+    "SIM",         # flake8-simplify
+    "T20",         # flake8-print
+    "TID",         # flake8-tidy-imports
+    "UP",          # pyupgrade
+    "YTT",         # flake8-2020
+    "EXE",         # flake8-executable
+    "NPY",         # NumPy specific rules
+    "PD",          # pandas-vet
+]
+ignore = [
+    "E501",        # line too long
+    "N802",        # function name lowercase
+    "N803",        # argument name should be lowercase
+    "N806",        # variable in function should be lowercase
+    "PD002",       # 'inplace=True' should be avoided
+    "PD011",       # use '.to_numpy() instead of '.values'
+    "PLR0913",     # Too many arguments to function call
+    "PLR2004",     # magic value used in comparison
+    "PT012",       # pytest.raises() multiline statement
+    "RET504",      # unnecessary variable assignment before 'return'
+]
+flake8-unused-arguments.ignore-variadic-names = true
+pep8-naming.classmethod-decorators = [
+    "classmethod",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = [
+    "F401",        # unused imports
+]
+"src/mda-tui/__init__.py" = [
+    "E402",        # module level import not at top of file
+]
+"tests/**" = [
+    "PLR2004",     # magic value used in comparison
+    "S101",        # use of assert
+]
+"docs/**" = [
+    "I",          # isort
+]
+"docs/conf.py" = [
+    "E402",        # module level import not at top of file
 ]
 
 [tool.black]
-line-length = 80
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | \.pytest_cache
+    | \.ruff_cache
+    | \.gitignore
+    | _build
+    | build
+    | dist
+    | examples
+  )/
+)
+'''
 extend-exclude = "versioneer.py"
+line-length = 100
+target-version = ["py39", "py310", "py311"]
+
+[tool.ruff.isort]
+force-single-line = false
+combine-as-imports = true
+force-sort-within-sections = true
+order-by-type = true
+known-first-party = ["mda-tui"]
+
+
+[build_sphinx]
+all-files = 1
+source-dir = docs/
+build-dir = docs/_build
+warning-is-error = 1
+
