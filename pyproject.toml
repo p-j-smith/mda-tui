@@ -40,7 +40,7 @@ doc = [
     "sphinx_rtd_theme",
 ]
 dev =[
-    "mda-tui[test,docs]",
+    "mda-tui[test,doc]",
     "pre-commit",
 ]
 
@@ -100,6 +100,31 @@ fix = true
 show-fixes = true
 force-exclude = true
 line-length = 100
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "versioneer.py",
+    "src/mda_tui/_version.py",
+]
 select = [
     "E", "F", "W", # flake8
     "A",           # flake8-builtins
@@ -138,6 +163,7 @@ ignore = [
     "N802",        # function name lowercase
     "N803",        # argument name should be lowercase
     "N806",        # variable in function should be lowercase
+    "N813",        # Camelcase `PackageName` imported as lowercase
     "PD002",       # 'inplace=True' should be avoided
     "PD011",       # use '.to_numpy() instead of '.values'
     "PLR0913",     # Too many arguments to function call
@@ -164,31 +190,16 @@ pep8-naming.classmethod-decorators = [
 "docs/**" = [
     "I",          # isort
 ]
-"docs/conf.py" = [
+"docs/source/conf.py" = [
     "E402",        # module level import not at top of file
+    "A001",        # Variable 'copyright' shadows a Python builtin
 ]
 
 [tool.black]
-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | \.pytest_cache
-    | \.ruff_cache
-    | \.gitignore
-    | _build
-    | build
-    | dist
-    | examples
-  )/
-)
-'''
-extend-exclude = "versioneer.py"
+extend-exclude = [
+    "versioneer.py",
+    "src/mda_tui/_version.py",
+]
 line-length = 100
 target-version = ["py39", "py310", "py311"]
 
