@@ -3,5 +3,11 @@ include MANIFEST.in
 include AUTHORS.md CHANGELOG.md CODE_OF_CONDUCT.md README.md
 include versioneer.py
 
-graft mda_tui
 global-exclude *.py[cod] __pycache__ *.so
+
+graft src
+prune docs
+prune tests
+exclude *.md
+exclude *.yaml
+exclude *.yml
