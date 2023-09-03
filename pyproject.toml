@@ -29,6 +29,9 @@ dynamic = [
     "version",
 ]
 
+[project.scripts]
+mda = "mda_tui.__main__:main"
+
 [project.optional-dependencies]
 test = [
     "pytest>=6.0",
