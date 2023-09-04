@@ -91,6 +91,13 @@ class MDA(App):
                 self.notify(failure.description, severity="error", timeout=10)
             return
 
+        output_trajectory_selector = self.query_one(TrajectoryWriterSelector)
+        valid_output_trajectory_result = output_trajectory_selector.validate()
+        if not valid_output_trajectory_result.is_valid:
+            for failure in valid_output_trajectory_result.failures:
+                self.notify(failure.description, severity="error", timeout=10)
+            return
+
         # Load universe
         topology = topology_selector.file
         trajectory = trajectory_selector.file
