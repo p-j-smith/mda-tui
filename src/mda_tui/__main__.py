@@ -108,16 +108,34 @@ class MDA(App):
 
         # Apply transformation
         transformation = self.query_one(TransformationSelector).query_one(Select).value
+        if transformation is None:
+            self.notify(
+                "No transformation selected - please select a transformation",
+                severity="error",
+                timeout=20,
+            )
+            return
         u.trajectory.add_transformations(transformation)
 
         # Write transformed trajectory
         start = self.query_one(MDARun).query_one("#start", Input).value
         stop = self.query_one(MDARun).query_one("#stop", Input).value
         step = self.query_one(MDARun).query_one("#step", Input).value
-        output_trajectory = self.query_one(TrajectoryWriterSelector).query_one(Input).value
-        with mda.Writer(output_trajectory) as f:
+
+        start = None if not start else int(start)
+        stop = None if not stop else int(stop)
+        step = None if not step else int(step)
+
+        output_trajectory = pathlib.Path(
+            self.query_one(TrajectoryWriterSelector).query_one(Input).value,
+        )
+        output_trajectory.parent.mkdir(parents=True, exist_ok=True)
+        with mda.Writer(output_trajectory.as_posix()) as f:
+            # TODO: show a progress bar
             for _ts in u.trajectory[start:stop:step]:
                 f.write(u.atoms)
+
+        self.notify(f"Finished writing transfomed trajectory to {output_trajectory}", timeout=20)
 
 
 def main():
