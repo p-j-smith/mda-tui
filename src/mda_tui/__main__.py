@@ -1,3 +1,5 @@
+import pathlib
+
 import MDAnalysis as mda
 from textual import on
 from textual.app import App, ComposeResult
@@ -76,9 +78,33 @@ class MDA(App):
         """Perform the transformation"""
 
         # Load universe
-        trajectory = self.query_one(TopologyReaderSelector).query_one(Input).value
-        topology = self.query_one(TrajectoryReaderSelector).query_one(Input).value
-        u = mda.Universe(topology, trajectory)
+        topology = pathlib.Path(self.query_one(TopologyReaderSelector).query_one(Input).value)
+        trajectory = pathlib.Path(self.query_one(TrajectoryReaderSelector).query_one(Input).value)
+
+        try:
+            u = mda.Universe(topology.as_posix(), trajectory.as_posix())
+        except ValueError as e:
+            if "isn't a valid topology format" in str(e):
+                self.notify(
+                    f"Unknown topology format: '{topology.suffix}'",
+                    severity="error",
+                    timeout=20,
+                )
+                return
+        except TypeError as e:
+            if "Cannot find an appropriate coordinate reader for file " in str(e):
+                self.notify(
+                    f"Unknonw trajectory format: '{trajectory.suffix}'",
+                    severity="error",
+                    timeout=20,
+                )
+                return
+        except FileNotFoundError as e:
+            self.notify(f"No such file: '{e.filename}'", severity="error", timeout=20)
+            return
+        except OSError:
+            self.notify(f"No such file: '{trajectory}'", severity="error", timeout=20)
+            return
 
         # Apply transformation
         transformation = self.query_one(TransformationSelector).query_one(Select).value
