@@ -164,7 +164,7 @@ class TrajectoryReaderSelector(FileSelector):
     validators: ClassVar = [
         File(failure_description="Input trajectory file does not exist"),
         FileExtension(
-            valid_extensions=sorted(mda._PARSERS.keys()),
+            valid_extensions=sorted(mda._READERS.keys()),
             failure_description="Unknown input trajectory format",
         ),
     ]
