@@ -27,3 +27,8 @@ FileSelector Input {
 FileSelector Button {
     width: 15%;
 }
+
+TransformationSelector {
+    height: 4;
+    width: 70%;
+}
