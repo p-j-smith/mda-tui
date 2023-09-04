@@ -30,9 +30,9 @@ class FileSelector(Horizontal):
     """
 
     filters: FileFilters | None = None
-    placeholder: str | None = None
+    placeholder: str = "select file"
     input_id: str | None = None
-    button_id: str | None = None
+    button_id: str | None = "openFile"
 
     def compose(self) -> ComposeResult:
         """Create the layout for the file selector"""
@@ -69,21 +69,12 @@ class FileSelector(Horizontal):
 
 
 class TopologyReaderSelector(FileSelector):
-    """Widget for selecting a topology to load
-
-    Attributes:
-        filters: List of filters to use when selecting files
-        input_placeholder: String to show in empty Input widget
-        input_id: Textual ID to use for the Input widget
-        button_id: Textual ID to use for the Button widget
-    """
+    """Widget for selecting a topology to load"""
 
     filters: FileFilters = FileSelector.create_file_filters(
         extensions=sorted(mda._PARSERS.keys()),
     )
     placeholder: str = "select topology file"
-    input_id: None = None
-    button_id: str = "openFile"
 
 
 class TrajectoryReaderSelector(FileSelector):
@@ -93,8 +84,6 @@ class TrajectoryReaderSelector(FileSelector):
         extensions=sorted(mda._READERS.keys()),
     )
     placeholder: str = "select trajectory file"
-    input_id: None = None
-    button_id: str = "openFile"
 
 
 class TrajectoryWriterSelector(FileSelector):
@@ -104,8 +93,6 @@ class TrajectoryWriterSelector(FileSelector):
         extensions=sorted(mda._MULTIFRAME_WRITERS.keys()),
     )
     placeholder: str = "select transformed trajectory file"
-    input_id: None = None
-    button_id: str = "openFile"
 
     def launch_dialogue(self):
         """Open a file dialogue box"""
