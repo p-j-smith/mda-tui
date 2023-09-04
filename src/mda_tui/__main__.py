@@ -1,8 +1,11 @@
+import MDAnalysis as mda
 from textual import on
 from textual.app import App, ComposeResult
 from textual.widgets import (
     Button,
     Header,
+    Input,
+    Select,
     TabbedContent,
     TabPane,
 )
@@ -14,6 +17,8 @@ from mda_tui.widgets import (
     TrajectoryWriterSelector,
     TransformationSelector,
 )
+
+# TODO: Add validation for Input widgets
 
 
 class MDA(App):
@@ -65,6 +70,28 @@ class MDA(App):
             trajectory_widget.launch_dialogue(),
             callback=trajectory_widget.show_selected_file,
         )
+
+    @on(Button.Pressed, "MDARun #run")
+    def run_transformation(self) -> None:
+        """Perform the transformation"""
+
+        # Load universe
+        trajectory = self.query_one(TopologyReaderSelector).query_one(Input).value
+        topology = self.query_one(TrajectoryReaderSelector).query_one(Input).value
+        u = mda.Universe(topology, trajectory)
+
+        # Apply transformation
+        transformation = self.query_one(TransformationSelector).query_one(Select).value
+        u.trajectory.add_transformations(transformation)
+
+        # Write transformed trajectory
+        start = self.query_one(MDARun).query_one("#start", Input).value
+        stop = self.query_one(MDARun).query_one("#stop", Input).value
+        step = self.query_one(MDARun).query_one("#step", Input).value
+        output_trajectory = self.query_one(TrajectoryWriterSelector).query_one(Input).value
+        with mda.Writer(output_trajectory) as f:
+            for _ts in u.trajectory[start:stop:step]:
+                f.write(u.atoms)
 
 
 def main():
