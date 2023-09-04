@@ -6,7 +6,6 @@ from textual.app import App, ComposeResult
 from textual.widgets import (
     Button,
     Header,
-    Input,
     Select,
     TabbedContent,
     TabPane,
@@ -77,34 +76,25 @@ class MDA(App):
     def run_transformation(self) -> None:
         """Perform the transformation"""
 
-        # Load universe
-        topology = pathlib.Path(self.query_one(TopologyReaderSelector).query_one(Input).value)
-        trajectory = pathlib.Path(self.query_one(TrajectoryReaderSelector).query_one(Input).value)
+        # Validate input
+        topology_selector = self.query_one(TopologyReaderSelector)
+        valid_topology_result = topology_selector.validate()
+        if not valid_topology_result.is_valid:
+            for failure in valid_topology_result.failures:
+                self.notify(failure.description, severity="error", timeout=10)
+            return
 
-        try:
-            u = mda.Universe(topology.as_posix(), trajectory.as_posix())
-        except ValueError as e:
-            if "isn't a valid topology format" in str(e):
-                self.notify(
-                    f"Unknown topology format: '{topology.suffix}'",
-                    severity="error",
-                    timeout=20,
-                )
-                return
-        except TypeError as e:
-            if "Cannot find an appropriate coordinate reader for file " in str(e):
-                self.notify(
-                    f"Unknonw trajectory format: '{trajectory.suffix}'",
-                    severity="error",
-                    timeout=20,
-                )
-                return
-        except FileNotFoundError as e:
-            self.notify(f"No such file: '{e.filename}'", severity="error", timeout=20)
+        trajectory_selector = self.query_one(TrajectoryReaderSelector)
+        valid_trajectory_result = trajectory_selector.validate()
+        if not valid_trajectory_result.is_valid:
+            for failure in valid_trajectory_result.failures:
+                self.notify(failure.description, severity="error", timeout=10)
             return
-        except OSError:
-            self.notify(f"No such file: '{trajectory}'", severity="error", timeout=20)
-            return
+
+        # Load universe
+        topology = topology_selector.file
+        trajectory = trajectory_selector.file
+        u = mda.Universe(topology.as_posix(), trajectory.as_posix())
 
         # Apply transformation
         transformation = self.query_one(TransformationSelector).query_one(Select).value
@@ -118,17 +108,8 @@ class MDA(App):
         u.trajectory.add_transformations(transformation)
 
         # Write transformed trajectory
-        start = self.query_one(MDARun).query_one("#start", Input).value
-        stop = self.query_one(MDARun).query_one("#stop", Input).value
-        step = self.query_one(MDARun).query_one("#step", Input).value
-
-        start = None if not start else int(start)
-        stop = None if not stop else int(stop)
-        step = None if not step else int(step)
-
-        output_trajectory = pathlib.Path(
-            self.query_one(TrajectoryWriterSelector).query_one(Input).value,
-        )
+        (start, stop, step) = self.query_one(MDARun).slice
+        output_trajectory: pathlib.Path = self.query_one(TrajectoryWriterSelector).file
         output_trajectory.parent.mkdir(parents=True, exist_ok=True)
         with mda.Writer(output_trajectory.as_posix()) as f:
             # TODO: show a progress bar
