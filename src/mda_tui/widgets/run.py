@@ -1,22 +1,12 @@
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal
-from textual.validation import Integer, ValidationResult
 from textual.widgets import (
     Button,
     Input,
 )
 
-
-class IntegerOrNone(Integer):
-    """Check that input is empty or can be cast to an integer"""
-
-    def __init__(self, failure_description):
-        super().__init__(failure_description=failure_description)
-
-    def validate(self, value: str) -> ValidationResult:
-        value = value if value else "0"
-        return super().validate(value) if "." not in value else self.failure()
+from mda_tui.validators import IntegerOrNoneValidator
 
 
 class MDARun(Horizontal):
@@ -26,17 +16,23 @@ class MDARun(Horizontal):
         """Create the layout for setting run parameters"""
         yield Input(
             placeholder="start",
-            validators=IntegerOrNone(failure_description="'start' must be an integer or empty"),
+            validators=IntegerOrNoneValidator(
+                failure_description="'start' must be an integer or empty",
+            ),
             id="start",
         )
         yield Input(
             placeholder="stop",
-            validators=IntegerOrNone(failure_description="'stop' must be an integer or empty"),
+            validators=IntegerOrNoneValidator(
+                failure_description="'stop' must be an integer or empty",
+            ),
             id="stop",
         )
         yield Input(
             placeholder="step",
-            validators=IntegerOrNone(failure_description="'step' must be an integer or empty"),
+            validators=IntegerOrNoneValidator(
+                failure_description="'step' must be an integer or empty",
+            ),
             id="step",
         )
         yield Button("run", id="run")

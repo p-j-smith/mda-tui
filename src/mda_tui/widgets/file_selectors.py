@@ -6,7 +6,7 @@ from textual.app import ComposeResult
 from textual.containers import (
     Horizontal,
 )
-from textual.validation import Failure, ValidationResult, Validator
+from textual.validation import Validator
 from textual.widgets import (
     Button,
     Input,
@@ -14,70 +14,14 @@ from textual.widgets import (
 import textual_fspicker
 from typing_extensions import TypeAlias
 
+from mda_tui.validators import (
+    FileExtensionValidator,
+    FileValidator,
+)
 from mda_tui.widgets.file_dialogues import FileOpen, FileSave
 
 FilterFunction: TypeAlias = Callable[[Path], bool]
 FileFilters: TypeAlias = list[tuple[str, FilterFunction]]
-
-
-class File(Validator):
-    """Check that input is a valid file."""
-
-    def __init__(
-        self,
-        failure_description: str | None = None,
-    ) -> None:
-        super().__init__(failure_description=failure_description)
-
-    class InvalidFile(Failure):
-        """Indicates that the file does not exist."""
-
-    def validate(self, value: str) -> ValidationResult:
-        """Validates that `value` is a valid file (i.e. it exists).
-
-        Args:
-            value: The value to validate.
-
-        Returns:
-            The result of the validation.
-        """
-        invalid_file = ValidationResult.failure([File.InvalidFile(self, value)])
-        file = Path(value).resolve()
-        if not file.exists() or not file.is_file():
-            return invalid_file
-        return self.success()
-
-
-class FileExtension(Validator):
-    """Check that input has a valid file extension."""
-
-    def __init__(
-        self,
-        failure_description: str | None = None,
-        valid_extensions: list[str | Path] | None = None,
-    ) -> None:
-        super().__init__(failure_description=failure_description)
-        self.valid_extensions = valid_extensions
-
-    class InvalidFileExtension(Failure):
-        """Indicates that the file extension is invalid."""
-
-    def validate(self, value: str) -> ValidationResult:
-        """Validates that `value` is a valid file extension.
-
-        Args:
-            value: The value to validate.
-
-        Returns:
-            The result of the validation.
-        """
-        invalid_extension = ValidationResult.failure(
-            [FileExtension.InvalidFileExtension(self, value)],
-        )
-        extension = Path(value).suffix.lstrip(".")
-        if self.valid_extensions is not None and extension.upper() not in self.valid_extensions:
-            return invalid_extension
-        return self.success()
 
 
 class FileSelector(Horizontal):
@@ -146,8 +90,8 @@ class TopologyReaderSelector(FileSelector):
     )
     placeholder: str = "select topology file"
     validators: ClassVar = [
-        File(failure_description="Input topology file does not exist"),
-        FileExtension(
+        FileValidator(failure_description="Input topology file does not exist"),
+        FileExtensionValidator(
             valid_extensions=sorted(mda._PARSERS.keys()),
             failure_description="Unknown input topology format",
         ),
@@ -162,8 +106,8 @@ class TrajectoryReaderSelector(FileSelector):
     )
     placeholder: str = "select trajectory file"
     validators: ClassVar = [
-        File(failure_description="Input trajectory file does not exist"),
-        FileExtension(
+        FileValidator(failure_description="Input trajectory file does not exist"),
+        FileExtensionValidator(
             valid_extensions=sorted(mda._READERS.keys()),
             failure_description="Unknown input trajectory format",
         ),
@@ -178,7 +122,7 @@ class TrajectoryWriterSelector(FileSelector):
     )
     placeholder: str = "select transformed trajectory file"
     validators: ClassVar = [
-        FileExtension(
+        FileExtensionValidator(
             valid_extensions=sorted(mda._MULTIFRAME_WRITERS.keys()),
             failure_description="Unknown output trajectory format",
         ),
