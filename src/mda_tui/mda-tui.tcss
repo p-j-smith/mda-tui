@@ -1,34 +1,92 @@
 #run {
-    width: 100%;
-    height: 4;
+    width: 1fr;
+    height: 1fr;
     margin: 0;
-    padding: 0;
-    align: left middle;
+    padding: 0 3 0 1;
+    align: center top;
 }
+
 #run Input {
-    width: 15%;
+    width: 1fr;
     height: 3;
 }
 
 #run Button {
-    width: 15%;
+    width: 1fr;
     height: 3;
 }
 
 FileSelector {
+    width: 1fr;
     height: 4;
     margin: 0;
     padding: 0;
 }
 
 FileSelector Input {
-    width: 70%;
+    width: 5fr;
 }
 FileSelector Button {
-    width: 15%;
+    width: 1fr;
 }
 
 TransformationSelector {
-    height: 4;
-    width: 70%;
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}
+
+TransformationSelector Horizontal {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}
+
+TransformationSelector Select {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: 3;
+}
+
+WidgetWithLabel {
+    layout: horizontal;
+    height: 5;
+    align: left middle;
+    padding: 0;
+    margin: 0;
+}
+
+WidgetWithLabel Label {
+    height: 3;
+    padding: 1 0;
+    width: 15%;
+    text-align: right;
+}
+
+WidgetWithLabel Input {
+    height: 3;
+    width: 1fr;
+}
+
+TransformationSelector ContentSwitcher Translate {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}
+
+TransformationSelector ContentSwitcher CenterInBox {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}
+
+#center_on Horizontal Input{
+    height: 3;
+    width: 1fr;
+    align: left middle;
 }
