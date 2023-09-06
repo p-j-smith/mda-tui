@@ -1,6 +1,24 @@
 from pathlib import Path
 
-from textual.validation import Failure, Integer, ValidationResult, Validator
+import MDAnalysis as mda
+from textual.validation import (
+    Failure,
+    Integer,
+    Number,
+    ValidationResult,
+    Validator,
+)
+
+
+class NumberOrNoneValidator(Number):
+    """Check that input is empty or is a number"""
+
+    def __init__(self, failure_description):
+        super().__init__(failure_description=failure_description)
+
+    def validate(self, value: str) -> ValidationResult:
+        value = value if value else "0"
+        return super().validate(value)
 
 
 class IntegerOrNoneValidator(Integer):
@@ -72,3 +90,43 @@ class FileExtensionValidator(Validator):
         if self.valid_extensions is not None and extension.upper() not in self.valid_extensions:
             return invalid_extension
         return self.success()
+
+
+class AtomSelectionValidator(Validator):
+    """Check that input is a valid selection string"""
+
+    def __init__(
+        self,
+        failure_description: str | None = None,
+    ) -> None:
+        super().__init__(failure_description=failure_description)
+        self.universe = mda.Universe.empty(10)
+
+    class InvalidAtomSelection(Failure):
+        """Indicates that the selection string is invalid."""
+
+    def validate(self, value: str) -> ValidationResult:
+        """Validates that `value` is a valid selection strin (i.e. it returns an AtomGroup).
+
+        Args:
+            value: The value to validate.
+
+        Returns:
+            The result of the validation.
+        """
+        failure = AtomSelectionValidator.InvalidAtomSelection(self, value)
+        invalid_selection = ValidationResult.failure([failure])
+        value = value if value else "all"
+        try:
+            self.universe.select_atoms(value)
+        except mda.exceptions.SelectionError as e:
+            failure.description = f"Invalid atom selection - {e}"
+            return invalid_selection
+        except mda.exceptions.NoDataError as e:
+            failure.description = f"Invalid atom selection - {e}"
+            return invalid_selection
+        except AttributeError as e:
+            failure.description = f"Invalid atom selection - {e}"
+            return invalid_selection
+        else:
+            return self.success()
