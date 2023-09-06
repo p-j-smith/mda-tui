@@ -100,7 +100,6 @@ class AtomSelectionValidator(Validator):
         failure_description: str | None = None,
     ) -> None:
         super().__init__(failure_description=failure_description)
-        self.universe = mda.Universe.empty(10)
 
     class InvalidAtomSelection(Failure):
         """Indicates that the selection string is invalid."""
@@ -118,7 +117,7 @@ class AtomSelectionValidator(Validator):
         invalid_selection = ValidationResult.failure([failure])
         value = value if value else "all"
         try:
-            self.universe.select_atoms(value)
+            mda.core.selection.Parser.parse(selectstr=value, selgroups={})
         except mda.exceptions.SelectionError as e:
             failure.description = f"Invalid atom selection - {e}"
             return invalid_selection
