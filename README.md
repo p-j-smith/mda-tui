@@ -1,11 +1,18 @@
-MDAnalysis TUI
-==============================
+# MDAnalysis TUI
+A textual user interface (TUI) for MDAnalysis trajectory transformations
+
 [//]: # (Badges)
 
 | **Latest release** | [![Last release tag][badge_release]][url_latest_release] ![GitHub commits since latest release (by date) for a branch][badge_commits_since]  [![Documentation Status][badge_docs]][url_docs]|
 | :----------------- | :------- |
 | **Status**         | [![GH Actions Status][badge_actions]][url_actions] [![codecov][badge_codecov]][url_codecov] |
 | **Community**      | [![License: GPL v2][badge_license]][url_license]  [![Powered by MDAnalysis][badge_mda]][url_mda]|
+
+## Note
+
+I've created MDAnalysis TUI mostly as a way of learning [Textual](https://textual.textualize.io/) and
+trying out the [MDAKit cookiecutter](https://github.com/MDAnalysis/mdakit-cookie). It should be considered as alpha
+software that may change without warning.
 
 [badge_actions]: https://github.com/p-j-smith/mda-tui/actions/workflows/gh-ci.yaml/badge.svg
 [badge_codecov]: https://codecov.io/gh/p-j-smith/mda-tui/branch/main/graph/badge.svg
@@ -19,47 +26,28 @@ MDAnalysis TUI
 [url_docs]: https://mda-tui.readthedocs.io/en/latest/?badge=latest
 [url_latest_release]: https://github.com/p-j-smith/mda-tui/releases
 [url_license]: https://www.gnu.org/licenses/gpl-2.0
-[url_mda]: https://www.mdanalysis.orgA textual user interface (TUI) for MDAnalysis
+[url_mda]: https://www.mdanalysis.org
 
-MDAnalysis TUI is bound by a [Code of Conduct](https://github.com/p-j-smith/mda-tui/blob/main/CODE_OF_CONDUCT.md).
 
-### Installation
+## Installation
 
-To build MDAnalysis TUI from source,
-we highly recommend using virtual environments.
+When installing MDAnalysis TUI, we highly recommend using virtual environments.
 If possible, we strongly recommend that you use
-[Anaconda](https://docs.conda.io/en/latest/) as your package manager.
-Below we provide instructions both for `conda` and
-for `pip`.
+[Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) as your package manager.
 
-#### With conda
-
-Ensure that you have [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) installed.
+First ensure that you have [mamba](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) installed.
 
 Create a virtual environment and activate it:
 
 ```
-conda create --name mda-tui
+mamba create --name mda-tui -c conda-forge python=3.10 pip
 conda activate mda-tui
 ```
 
-Install the development and documentation dependencies:
+Then install MDAnalysis TUI:
 
 ```
-conda env update --name mda-tui --file devtools/conda-envs/test_env.yaml
-conda env update --name mda-tui --file docs/requirements.yaml
-```
-
-Build this package from source:
-
-```
-pip install -e .
-```
-
-If you want to update your dependencies (which can be risky!), run:
-
-```
-conda update --all
+python -m pip install mda-tui
 ```
 
 And when you are finished, you can exit the virtual environment with:
@@ -68,30 +56,44 @@ And when you are finished, you can exit the virtual environment with:
 conda deactivate
 ```
 
-#### With pip
+To use mamba instead, replace all `conda` commands with `mamba`.
 
-To build the package from source, run:
 
-```
-pip install -e .
-```
+### Installation from source
 
-If you want to create a development environment, install
-the dependencies required for tests and docs with:
+To build MDAnalysis TUI from source, follow the above steps for creating a virtual environment, clone this repository:
 
 ```
-pip install -e ".[test,doc]"
+git clone https://github.com/p-j-smith/mda-tui.git
 ```
 
-### Copyright
+The inside your virtual environment type:
+
+```
+python -m pip install -e .
+```
+
+If you want to create a development environment, you can
+install MDAnalysis TUI in editible mode along with
+the dependencies required for running tests and and building docs with
+the following command:
+
+```
+python -m pip install -e ".[dev]"
+```
+
+## Code of conduct
+
+MDAnalysis TUI is bound by a [Code of Conduct](https://github.com/p-j-smith/mda-tui/blob/main/CODE_OF_CONDUCT.md).
+
+## Copyright
 
 The MDAnalysis TUI source code is hosted at https://github.com/p-j-smith/mda-tui
 and is available under the GNU General Public License, version 2 (see the file [LICENSE](https://github.com/p-j-smith/mda-tui/blob/main/LICENSE)).
 
 Copyright (c) 2023, Paul Smith
 
-
-#### Acknowledgements
+## Acknowledgements
 
 Project based on the
 [MDAnalysis Cookiecutter](https://github.com/MDAnalysis/cookiecutter-mda) version 0.1.
