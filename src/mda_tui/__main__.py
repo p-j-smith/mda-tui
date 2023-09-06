@@ -104,14 +104,17 @@ class MDA(App):
         u = mda.Universe(topology.as_posix(), trajectory.as_posix())
 
         # Apply transformation
-        transformation = self.query_one(TransformationSelector).query_one(Select).value
-        if transformation is None:
+        transformation_wrapper = (
+            self.query_one(TransformationSelector).query_one("#transformation", Select).value
+        )
+        if transformation_wrapper is None:
             self.notify(
                 "No transformation selected - please select a transformation",
                 severity="error",
                 timeout=20,
             )
             return
+        transformation = transformation_wrapper.setup_transformation(universe=u)
         u.trajectory.add_transformations(transformation)
 
         # Write transformed trajectory
