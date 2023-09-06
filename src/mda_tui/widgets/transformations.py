@@ -64,10 +64,6 @@ class TransformationSelector(Vertical):
 class Translate(Vertical):
     """Widgets for setting parameters for translate transformation"""
 
-    """
-    vector: ArrayLike
-    """
-
     description = "Translate coordinates by a given vector"
     transformation = translate
     id = str(translate).removeprefix("<class '").removesuffix("'>")  # noqa: A003
@@ -122,13 +118,6 @@ class Translate(Vertical):
 class CenterInBox(Vertical):
     """Widgets for setting parameters for center_in_box transformation"""
 
-    """
-    ag: AtomGroup,
-    center: str = "geometry" | "mass",
-    point: ArrayLike | None = None,
-    wrap: bool = False,
-    """
-
     description = "Center atoms / molecules"
     transformation = center_in_box
     id = str(center_in_box).removeprefix("<class '").removesuffix("'>")  # noqa: A003
@@ -172,7 +161,7 @@ class CenterInBox(Vertical):
             Input(
                 placeholder="z",
                 validators=NumberOrNoneValidator(
-                    failure_description="'y' must be a number or empty",
+                    failure_description="'z' must be a number or empty",
                 ),
                 id="center_z",
             ),
@@ -198,10 +187,10 @@ class CenterInBox(Vertical):
     def point(self):
         x = self.query_one("#center_x", Input).value
         y = self.query_one("#center_y", Input).value
-        z = self.query_one("#center_y", Input).value
+        z = self.query_one("#center_z", Input).value
         x = float(x) if x else None
         y = float(y) if y else None
-        y = float(z) if z else None
+        z = float(z) if z else None
         return None if None in [x, y, z] else [x, y, z]
 
     @property
@@ -212,3 +201,6 @@ class CenterInBox(Vertical):
         """Initialise the transformation for a given universe"""
         ag = universe.select_atoms(self.selection)
         return self.transformation(ag=ag, center=self.method, point=self.point, wrap=self.wrap)
+
+    def validate(self):
+        return [widget.validate(widget.value) for widget in self.query(Input)]
