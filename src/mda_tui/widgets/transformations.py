@@ -188,6 +188,10 @@ class CenterInBox(Vertical):
         return sel
 
     @property
+    def method(self):
+        return self.query_one(Select).value
+
+    @property
     def point(self):
         x = self.query_one("#center_x", Input).value
         y = self.query_one("#center_y", Input).value
@@ -200,3 +204,8 @@ class CenterInBox(Vertical):
     @property
     def wrap(self):
         return self.query_one(Switch).value
+
+    def setup_transformation(self, universe: Universe):
+        """Initialise the transformation for a given universe"""
+        ag = universe.select_atoms(self.selection)
+        return self.transformation(ag=ag, center=self.method, point=self.point, wrap=self.wrap)
