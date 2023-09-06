@@ -19,8 +19,6 @@ from mda_tui.widgets import (
     TransformationSelector,
 )
 
-# TODO: Add validation for Input widgets
-
 
 class MDA(App):
     """A TUI for MDAnalysis."""
@@ -113,6 +111,13 @@ class MDA(App):
                 severity="error",
                 timeout=20,
             )
+            return
+        valid_transformation_wrapper_results = transformation_wrapper.validate()
+        all_valid = all(result.is_valid for result in valid_transformation_wrapper_results)
+        if not all_valid:
+            for result in valid_transformation_wrapper_results:
+                for failure in result.failures:
+                    self.notify(failure.description, severity="error", timeout=10)
             return
         transformation = transformation_wrapper.setup_transformation(universe=u)
         u.trajectory.add_transformations(transformation)

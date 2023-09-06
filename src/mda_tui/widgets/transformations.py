@@ -93,7 +93,7 @@ class Translate(Vertical):
             Input(
                 placeholder="z",
                 validators=NumberOrNoneValidator(
-                    failure_description="'y' must be a number or empty",
+                    failure_description="'z' must be a number or empty",
                 ),
                 id="translate_z",
             ),
@@ -105,15 +105,18 @@ class Translate(Vertical):
     def vector(self):
         x = self.query_one("#translate_x", Input).value
         y = self.query_one("#translate_y", Input).value
-        z = self.query_one("#translate_y", Input).value
+        z = self.query_one("#translate_z", Input).value
         x = float(x) if x else 0
         y = float(y) if y else 0
-        y = float(z) if z else 0
+        z = float(z) if z else 0
         return [x, y, z]
 
     def setup_transformation(self, universe: Universe):  # noqa: ARG002
         """Initialise the transformation for a given universe"""
         return self.transformation(vector=self.vector)
+
+    def validate(self):
+        return [widget.validate(widget.value) for widget in self.query(Input)]
 
 
 class CenterInBox(Vertical):
