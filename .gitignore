@@ -62,6 +62,9 @@ instance/
 # Scrapy stuff:
 .scrapy
 
+# Mkdocs documentation
+site/
+
 # Sphinx documentation
 docs/_build/
 
