@@ -43,7 +43,7 @@ Create a virtual environment and activate it:
 
 ```
 mamba create --name mda-tui -c conda-forge python=3.10 pip
-conda activate mda-tui
+mamba activate mda-tui
 ```
 
 Then install MDAnalysis TUI:
@@ -55,10 +55,10 @@ python -m pip install mda-tui
 And when you are finished, you can exit the virtual environment with:
 
 ```
-conda deactivate
+mamba deactivate
 ```
 
-To use mamba instead, replace all `conda` commands with `mamba`.
+To use conda instead, replace all `mamba` commands with `conda`.
 
 
 ### Installation from source
@@ -69,7 +69,7 @@ To build MDAnalysis TUI from source, follow the above steps for creating a virtu
 git clone https://github.com/p-j-smith/mda-tui.git
 ```
 
-The inside your virtual environment type:
+Then inside your virtual environment type:
 
 ```
 python -m pip install -e .
