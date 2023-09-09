@@ -39,8 +39,8 @@ test = [
     "pytest-cov>=3.0",
 ]
 doc = [
-    "sphinx<7",
-    "sphinx_rtd_theme",
+    "mkdocs",
+    "mkdocs-material",
 ]
 dev =[
     "mda-tui[test,doc]",
