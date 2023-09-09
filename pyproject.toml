@@ -20,6 +20,7 @@ requires-python = ">=3.10"
 dependencies = [
     "MDAnalysis>=2.0.0",
     "textual",
+    "textual-fspicker",
 ]
 keywords = [
     "molecular simulations",
