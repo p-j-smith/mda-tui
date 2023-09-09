@@ -13,4 +13,5 @@ comment:
   flags: null
   paths: null
 ignore:
-  - "mda-tui/_version.py"
+  - "src/mda-tui/_version.py"
+  - "src/mda-tui/data/"
