@@ -48,3 +48,35 @@ async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Pa
     u_translated = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
     diff = (u.trajectory.timeseries() - u_translated.trajectory.timeseries()).flatten()
     assert_allclose(np.abs(diff), vector)
+
+
+@pytest.mark.asyncio()
+async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
+    pdb, xtc = universe_filenames
+    xtc_output = xtc.parent / "centered_trajectory.xtc"
+    ag = "all"
+
+    async with app.run_test() as pilot:
+        topology_reader_input = pilot.app.query_one(TopologyReaderSelector).query_one(Input)
+        trajectory_reader_input = pilot.app.query_one(TrajectoryReaderSelector).query_one(Input)
+        trajectory_writer_output = pilot.app.query_one(TrajectoryWriterSelector).query_one(Input)
+        transformation_selector_input = pilot.app.query_one(TransformationSelector).query_one(
+            "#transformation",
+            Select,
+        )
+        center_transformation = pilot.app.query_one(transformations.CenterInBox)
+
+        topology_reader_input.value = pdb.as_posix()
+        trajectory_reader_input.value = xtc.as_posix()
+        trajectory_writer_output.value = xtc_output.as_posix()
+        transformation_selector_input.value = center_transformation
+        center_transformation.query_one("#ag", Input).value = ag
+
+        pilot.app.run_transformation()
+
+    u = mda.Universe(pdb.as_posix(), xtc.as_posix())
+    u_centered = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
+    box = u.dimensions[:3]
+    with pytest.raises(AssertionError):
+        assert_allclose(box / 2, u.atoms.positions[0])
+    assert_allclose(box / 2, u_centered.atoms.positions[0])

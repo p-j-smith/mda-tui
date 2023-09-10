@@ -32,7 +32,7 @@ def universe_filenames(tmp_path_factory):
     n_frames = 1
     u = mda.Universe.empty(n_atoms, trajectory=True)
     coordinates = np.empty((n_frames, u.atoms.n_atoms, 3))
-    coordinates[0] = [5, 5, 5]
+    coordinates[0] = [2, 2, 2]
     u.load_new(coordinates, order="fac")
     dims = np.asarray(
         [

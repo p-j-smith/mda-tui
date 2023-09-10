@@ -140,6 +140,7 @@ class CenterInBox(Vertical):
         method: Select[str] = Select(
             options=options,
             prompt="select centering method",
+            value="geometry",
             id="centering_method",
         )
 
