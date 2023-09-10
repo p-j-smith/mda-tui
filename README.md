@@ -37,7 +37,7 @@ When installing MDAnalysis TUI, we highly recommend using virtual environments.
 If possible, we strongly recommend that you use
 [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) as your package manager.
 
-First ensure that you have [mamba](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) installed.
+First ensure that you have [mamba](https://mamba.readthedocs.io/en/latest/index.html) installed.
 
 Create a virtual environment and activate it:
 
