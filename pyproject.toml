@@ -84,7 +84,7 @@ source = [
 [tool.coverage.run]
 branch = true
 parallel = true
-source = ["mda-tui"]
+source = ["mda_tui"]
 
 [tool.coverage.report]
 skip_covered = false
