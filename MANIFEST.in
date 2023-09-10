@@ -8,6 +8,7 @@ global-exclude *.py[cod] __pycache__ *.so
 graft src
 prune docs
 prune tests
+exclude tox.ini
 exclude *.md
 exclude *.yaml
 exclude *.yml
