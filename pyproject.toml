@@ -35,7 +35,9 @@ mda = "mda_tui.__main__:main"
 
 [project.optional-dependencies]
 test = [
+    "asyncio",
     "pytest>=6.0",
+    "pytest-asyncio",
     "pytest-xdist>=2.5",
     "pytest-cov>=3.0",
 ]

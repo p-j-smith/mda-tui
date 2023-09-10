@@ -35,7 +35,7 @@ class MDARun(Horizontal):
             ),
             id="step",
         )
-        yield Button("run", id="run")
+        yield Button("run", id="run-button")
 
     @on(Input.Changed)
     def show_invalid_reasons(self, event: Input.Changed) -> None:

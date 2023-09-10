@@ -70,7 +70,7 @@ class MDA(App):
             callback=trajectory_widget.show_selected_file,
         )
 
-    @on(Button.Pressed, "MDARun #run")
+    @on(Button.Pressed, "MDARun #run-button")
     def run_transformation(self) -> None:
         """Perform the transformation"""
 
