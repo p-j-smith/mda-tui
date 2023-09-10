@@ -75,6 +75,12 @@ testpaths = [
     "tests",
 ]
 
+[tool.coverage.paths]
+source = [
+    "src",
+    ".tox/*/site-packages",
+]
+
 [tool.coverage.run]
 branch = true
 parallel = true
@@ -88,7 +94,9 @@ precision = 2
 omit = [
     ".gitignore",
     "tests/",
-    "mda_tui/_version.py", # Omit generated versioneer
+    "src/mda_tui/_version.py", # Omit generated versioneer
+    "versioneer.py",
+    "*/__init__.py",
 ]
 exclude_lines = [
     "pragma: no cover",
