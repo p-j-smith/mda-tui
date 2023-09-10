@@ -72,7 +72,7 @@ git clone https://github.com/p-j-smith/mda-tui.git
 Then inside your virtual environment type:
 
 ```
-python -m pip install -e .
+python -m pip install .
 ```
 
 If you want to create a development environment, you can
