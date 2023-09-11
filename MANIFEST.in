@@ -11,3 +11,4 @@ exclude tox.ini
 exclude *.md
 exclude *.yaml
 exclude *.yml
+exclude src/mda_tui/_version.py
