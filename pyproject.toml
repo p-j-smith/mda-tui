@@ -1,6 +1,7 @@
 [build-system]
 requires = [
   "setuptools >= 40.9.0",
+  "setuptools-scm",
   "wheel",
 ]
 build-backend = "setuptools.build_meta"
@@ -64,13 +65,9 @@ usersupport = "https://github.com/p-j-smith/mda-tui/discussions"
 [tool.setuptools]
 include-package-data = true
 
-[tool.versioneer]
-VCS = "git"
-style = "pep440"
-versionfile_source = "src/mda_tui/_version.py"
-versionfile_build = "src/mda_tui/_version.py"
-tag_prefix = ''
-parentdir_prefix = ""
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+write_to = "src/mda_tui/_version.py"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
