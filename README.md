@@ -1,6 +1,10 @@
 # MDAnalysis TUI
 A textual user interface (TUI) for MDAnalysis trajectory transformations
 
+<video controls>
+  <source src="docs/movies/mda-tui-center-in-box.mp4" type="video/mp4">
+</video>
+
 [//]: # (Badges)
 
 | **Latest release** | [![Last release tag][badge_release]][url_latest_release] ![GitHub commits since latest release (by date) for a branch][badge_commits_since]  [![Documentation Status][badge_docs]][url_docs]|
