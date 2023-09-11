@@ -10,11 +10,9 @@ https://github.com/p-j-smith/mda-tui/assets/29753790/b73c1a7e-ca97-41cd-b7a2-098
 | **Status**         | [![Tests][badge_test]][url_test] [![codecov][badge_codecov]][url_codecov] [![Linting][badge_linting]][url_linting] |
 | **Community**      | [![License: GPL v2][badge_license]][url_license]  [![Powered by MDAnalysis][badge_mda]][url_mda]|
 
-## Note
+## Warning
 
-I've created MDAnalysis TUI mostly as a way of learning [Textual](https://textual.textualize.io/) and
-trying out the [MDAKit cookiecutter](https://github.com/MDAnalysis/mdakit-cookie). It should be considered as alpha
-software that may change without warning.
+MDanalysis TUI is alpha software and may change without warning.
 
 [badge_test]: https://github.com/p-j-smith/mda-tui/actions/workflows/test_and_build.yaml/badge.svg
 [badge_linting]: https://github.com/p-j-smith/mda-tui/actions/workflows/linting.yml/badge.svg
