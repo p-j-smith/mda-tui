@@ -1,9 +1,7 @@
 # MDAnalysis TUI
 A textual user interface (TUI) for MDAnalysis trajectory transformations
 
-<video controls>
-  <source src="docs/movies/mda-tui-center-in-box.mp4" type="video/mp4">
-</video>
+https://github.com/p-j-smith/mda-tui/assets/29753790/b73c1a7e-ca97-41cd-b7a2-09899ecf1cb3
 
 [//]: # (Badges)
 
