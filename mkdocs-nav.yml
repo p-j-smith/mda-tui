@@ -1,0 +1,9 @@
+nav:
+      - Introduction:
+              - "index.md"
+      - Transformations:
+              - "transformations/index.md"
+              - "transformations/translate.md"
+              - "transformations/center-in-box.md"
+      - Inputs:
+              - "inputs/index.md"
