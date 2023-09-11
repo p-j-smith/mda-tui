@@ -57,10 +57,10 @@ dev =[
 
 [project.urls]
 source = "https://github.com/p-j-smith/mda-tui"
-homepage = "https://github.com/p-j-smith/mda-tui"
+homepage = "https://p-j-smith.github.io/mda-tui/"
 bugtracker = "https://github.com/p-j-smith/mda-tui/issues"
 usersupport = "https://github.com/p-j-smith/mda-tui/discussions"
-# documentation = "https://mda-tui.readthedocs.io"
+documentation = "https://p-j-smith.github.io/mda-tui/"
 
 [tool.setuptools]
 include-package-data = true

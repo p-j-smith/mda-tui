@@ -25,7 +25,7 @@ software that may change without warning.
 [url_test]: https://github.com/p-j-smith/mda-tui/actions/workflows/test_and_build.yaml?query=branch%3Amain+workflow%3Agh-test_and_build
 [url_linting]: https://github.com/p-j-smith/mda-tui/actions/workflows/linting.yml?query=branch%3Amain+workflow%3Agh-linting
 [url_codecov]: https://codecov.io/gh/p-j-smith/mda-tui/branch/main
-[url_docs]: https://github.com/p-j-smith/mda-tui/actions/workflows/docs.yml
+[url_docs]: https://p-j-smith.github.io/mda-tui/
 [url_latest_release]: https://github.com/p-j-smith/mda-tui/releases
 [url_license]: https://www.gnu.org/licenses/gpl-2.0
 [url_mda]: https://www.mdanalysis.org
