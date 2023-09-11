@@ -110,3 +110,6 @@ ENV/
 
 # poetry
 poetry.lock
+
+# setuptools-scm
+src/mda_tui/_version.py
