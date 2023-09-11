@@ -1,17 +1,22 @@
-# Welcome to MkDocs
+# Introduction
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Trajectory transformations in your teminal
 
-## Commands
+![mda-tui](images/mda-tui.png){ align=center }
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Installation
 
-## Project layout
+MDAnalysis TUI can be installed using pip:
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+```bash
+python -m pip install mda-tui
+```
+
+This will install MDAnalysis TUI along with all necessary dependencies.
+
+
+## Getting started
+
+Once you've installed MDAnalysis TUI, you can use the `mda` command from your terminal to launch the app.
+
+See the [transformations](transformations/index.md) docs for details on transformations currently available in MDAnalysis TUI.

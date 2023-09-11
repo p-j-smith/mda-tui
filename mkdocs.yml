@@ -30,12 +30,12 @@ markdown_extensions:
 theme:
   name: material
   features:
-    - navigation.tabs
+    - navigation.sections
     - navigation.indexes
-    - navigation.tabs.sticky
     - navigation.footer
     - content.code.annotate
     - content.code.copy
+
   palette:
   - media: "(prefers-color-scheme: light)"
     scheme: default
