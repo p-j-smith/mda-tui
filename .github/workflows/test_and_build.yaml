@@ -70,7 +70,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install setuptools cython numpy twine wheel build check-manifest
+        pip install setuptools twine wheel build check-manifest
 
     - name: Build package
       run: |
