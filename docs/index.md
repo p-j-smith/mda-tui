@@ -1,6 +1,6 @@
 # Introduction
 
-Trajectory transformations in your teminal
+Trajectory transformations in your terminal
 
 ![mda-tui](images/mda-tui.png){ align=center }
 
