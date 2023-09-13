@@ -170,8 +170,8 @@ class CenterInBox(Vertical):
         wrap = Switch()
 
         yield WidgetWithLabel(label="ag", widget=ag, id="center_ag")
-        yield WidgetWithLabel(label="method", widget=method, id="center_method")
-        yield WidgetWithLabel(label="center on", widget=point, id="center_on")
+        yield WidgetWithLabel(label="center", widget=method, id="center_method")
+        yield WidgetWithLabel(label="point", widget=point, id="center_on")
         yield WidgetWithLabel(label="wrap", widget=wrap, id="center_wrap")
 
     @property
