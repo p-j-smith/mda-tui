@@ -90,3 +90,10 @@ TransformationSelector ContentSwitcher CenterInBox {
     width: 1fr;
     align: left middle;
 }
+
+TransformationSelector ContentSwitcher Wrap {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}

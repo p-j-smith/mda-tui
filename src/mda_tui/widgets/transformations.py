@@ -3,6 +3,7 @@ from MDAnalysis.transformations import (
     TransformationBase,
     center_in_box,
     translate,
+    wrap,
 )
 from textual import on
 from textual.app import ComposeResult
@@ -47,10 +48,12 @@ class TransformationSelector(Vertical):
 
         translate = Translate(id=Translate.id)
         center_in_box = CenterInBox(id=CenterInBox.id)
+        wrap = Wrap(id=Wrap.id)
 
         options = [
             (translate.description, translate),
             (center_in_box.description, center_in_box),
+            (wrap.description, wrap),
         ]
         select: Select[TransformationBase] = Select(
             options=options,
@@ -62,6 +65,7 @@ class TransformationSelector(Vertical):
         with ContentSwitcher(initial=None, id="selector"):
             yield translate
             yield center_in_box
+            yield wrap
 
     @on(Select.Changed, "#transformation")
     def select_transformation(self, event) -> None:
@@ -229,6 +233,78 @@ class CenterInBox(Vertical):
         """Initialise the transformation for a given universe"""
         ag = universe.select_atoms(self.selection)
         return self.transformation(ag=ag, center=self.method, point=self.point, wrap=self.wrap)
+
+    def validate(self):
+        return [widget.validate(widget.value) for widget in self.query(Input)]
+
+
+class Wrap(Vertical):
+    """Widgets for setting parameters for the wrap transformation"""
+
+    description = "Wrap atoms into the unit cell"
+    transformation = wrap
+    id = str(wrap).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+
+    """
+    ag: Atomgroup
+        Atomgroup to be wrapped in the unit cell
+    compound : {'atoms', 'group', 'residues', 'segments', 'fragments'}, optional
+        The group which will be kept together through the shifting process.
+    """
+
+    def compose(self) -> ComposeResult:
+        """Create layout of parameter widgets"""
+
+        ag = Input(
+            placeholder="atom selection",
+            validators=AtomSelectionValidator(
+                failure_description="invalid atom selection",
+            ),
+            id="ag",
+        )
+
+        options = [
+            ("individual atoms", "atoms"),
+            ("selected atom group", "group"),
+            ("residues", "residues"),
+            ("segments", "segments"),
+            ("fragments", "fragments"),
+        ]
+        compound: Select[str] = Select(
+            options=options,
+            prompt="select compound to wrap",
+            value="atoms",
+            id="wrap_compound",
+        )
+
+        # define tooltips
+        ag_tooltip = "selection string for atom group to be wrapped into the unit cell. If empty, all atoms will be wrapped."
+        compound_tooltip = (
+            "select the group that will be kept together through the wrapping transformation"
+        )
+
+        yield WidgetWithLabel(label="ag", widget=ag, id="wrap_ag", tooltip=ag_tooltip)
+        yield WidgetWithLabel(
+            label="compound",
+            widget=compound,
+            id="wrap_compound",
+            tooltip=compound_tooltip,
+        )
+
+    @property
+    def selection(self):
+        sel = self.query_one("#ag", Input).value
+        sel = sel if sel else "all"
+        return sel
+
+    @property
+    def compound(self):
+        return self.query_one(Select).value
+
+    def setup_transformation(self, universe: Universe):
+        """Initialise the transformation for a given universe"""
+        ag = universe.select_atoms(self.selection)
+        return self.transformation(ag=ag, compound=self.compound)
 
     def validate(self):
         return [widget.validate(widget.value) for widget in self.query(Input)]
