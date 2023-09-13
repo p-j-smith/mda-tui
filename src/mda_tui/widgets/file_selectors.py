@@ -96,6 +96,7 @@ class TopologyReaderSelector(FileSelector):
             failure_description="Unknown input topology format",
         ),
     ]
+    tooltip = "select a valid topology file to load."
 
 
 class TrajectoryReaderSelector(FileSelector):
@@ -112,6 +113,7 @@ class TrajectoryReaderSelector(FileSelector):
             failure_description="Unknown input trajectory format",
         ),
     ]
+    tooltip = "select a valid trajectory file to load."
 
 
 class TrajectoryWriterSelector(FileSelector):
@@ -127,6 +129,7 @@ class TrajectoryWriterSelector(FileSelector):
             failure_description="Unknown output trajectory format",
         ),
     ]
+    tooltip = "select file to write the transformed trajetory to. Any existing file of the same name will be overwritten."
 
     def launch_dialogue(self):
         """Open a file dialogue box"""

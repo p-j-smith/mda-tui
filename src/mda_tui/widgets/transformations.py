@@ -57,6 +57,7 @@ class TransformationSelector(Vertical):
             prompt="select transformation",
             id="transformation",
         )
+        select.tooltip = "select a transformation to apply"
         yield select
         with ContentSwitcher(initial=None, id="selector"):
             yield translate

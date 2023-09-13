@@ -14,28 +14,39 @@ class MDARun(Horizontal):
 
     def compose(self) -> ComposeResult:
         """Create the layout for setting run parameters"""
-        yield Input(
+        start = Input(
             placeholder="start",
             validators=IntegerOrNoneValidator(
                 failure_description="'start' must be an integer or empty",
             ),
             id="start",
         )
-        yield Input(
+        stop = Input(
             placeholder="stop",
             validators=IntegerOrNoneValidator(
                 failure_description="'stop' must be an integer or empty",
             ),
             id="stop",
         )
-        yield Input(
+        step = Input(
             placeholder="step",
             validators=IntegerOrNoneValidator(
                 failure_description="'step' must be an integer or empty",
             ),
             id="step",
         )
-        yield Button("run", id="run-button")
+        run = Button("run", id="run-button")
+
+        # Define tooltips
+        start.tooltip = "first frame to transform (0-based index). If empty, defaults to the first frame of the trajectory."
+        stop.tooltip = "final frame to transform (non-inclusive). If empty, defaults to the final frame of the trajectory."
+        step.tooltip = "number of frames to skip between each transformed frame. If empty, defaults to no frame skipped."
+        run.tooltip = "run the transformation. This will read the input trajectory, apply the selected transformation to the selected frames and write the transformed trajecotry to the output file."
+
+        yield start
+        yield stop
+        yield step
+        yield run
 
     @on(Input.Changed)
     def show_invalid_reasons(self, event: Input.Changed) -> None:
