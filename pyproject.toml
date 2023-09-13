@@ -177,6 +177,7 @@ select = [
     "PD",          # pandas-vet
 ]
 ignore = [
+    "A002",        # argument `id` is shadowing a Python builtin
     "E501",        # line too long
     "N802",        # function name lowercase
     "N803",        # argument name should be lowercase

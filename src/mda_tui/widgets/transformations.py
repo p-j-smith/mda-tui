@@ -22,10 +22,17 @@ from mda_tui.validators import AtomSelectionValidator, NumberOrNoneValidator
 class WidgetWithLabel(Static):
     """Add a label to a widget"""
 
-    def __init__(self, label: str, widget: Static, id: str | None = None) -> None:  # noqa: A002
+    def __init__(
+        self,
+        label: str,
+        widget: Static,
+        id: str | None = None,
+        tooltip: str = "",
+    ) -> None:
+        super().__init__(id=id)
         self.label_text = label
         self.labelled_widget = widget
-        super().__init__(id=id)
+        self.tooltip = tooltip
 
     def compose(self) -> ComposeResult:
         yield Label(self.label_text)
@@ -95,7 +102,15 @@ class Translate(Vertical):
             ),
         )
 
-        yield WidgetWithLabel(label="vector", widget=vector, id="translate_vector")
+        # Define tooltips
+        vector_tooltip = "vector by which the all atoms will be translated"
+
+        yield WidgetWithLabel(
+            label="vector",
+            widget=vector,
+            id="translate_vector",
+            tooltip=vector_tooltip,
+        )
 
     @property
     def vector(self):
@@ -169,10 +184,21 @@ class CenterInBox(Vertical):
         )
         wrap = Switch()
 
-        yield WidgetWithLabel(label="ag", widget=ag, id="center_ag")
-        yield WidgetWithLabel(label="center", widget=method, id="center_method")
-        yield WidgetWithLabel(label="point", widget=point, id="center_on")
-        yield WidgetWithLabel(label="wrap", widget=wrap, id="center_wrap")
+        # Define tooltips
+        ag_tooltip = "selection string for atom group to be centered on the unit cell. If empty, will center all atoms."
+        method_tooltip = "choose the method of centering on the selected AtomGroup."
+        point_tooltip = "if provided, overrides the unit cell center - the coordinates of each timestep are translated so that the center of mass/geometry of the selected AtomGroup is aligned to this position instead. Leave empty to translate to the center of the unit cell."
+        wrap_tooltip = "if enabled, the atoms from the selected AtomGroup will be moved to the primary unit cell before calculating the center of mass or geometry."
+
+        yield WidgetWithLabel(label="ag", widget=ag, id="center_ag", tooltip=ag_tooltip)
+        yield WidgetWithLabel(
+            label="center",
+            widget=method,
+            id="center_method",
+            tooltip=method_tooltip,
+        )
+        yield WidgetWithLabel(label="point", widget=point, id="center_on", tooltip=point_tooltip)
+        yield WidgetWithLabel(label="wrap", widget=wrap, id="center_wrap", tooltip=wrap_tooltip)
 
     @property
     def selection(self):
