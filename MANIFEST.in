@@ -1,13 +1,6 @@
-include LICENSE
-include MANIFEST.in
-include AUTHORS.md CHANGELOG.md CODE_OF_CONDUCT.md README.md
+exclude .codecov.yml
+exclude .gitattributes
+exclude .gitignore
+exclude .pre-commit-config.yaml
 
-global-exclude *.py[cod] __pycache__ *.so
-
-graft src
-prune docs
-prune tests
-exclude tox.ini
-exclude *.md
-exclude *.yaml
-exclude *.yml
+prune .github
