@@ -28,12 +28,18 @@ def universe_filenames(tmp_path_factory):
     so we can read the file after the fixture has been created, and
     `tmp_path` has function-level scope.
     """
-    n_atoms = 1
+    n_atoms = 2
     n_frames = 1
     u = mda.Universe.empty(n_atoms, trajectory=True)
     coordinates = np.empty((n_frames, u.atoms.n_atoms, 3))
-    coordinates[0] = [2, 2, 2]
+    coordinates[0] = np.asarray(
+        [
+            [2, 2, 2],
+            [11, 11, 11],  # outside the unit cell
+        ],
+    )
     u.load_new(coordinates, order="fac")
+    u.add_bonds(values=[(0, 1)])
     dims = np.asarray(
         [
             [10, 10, 10, 90, 90, 90],

@@ -22,7 +22,7 @@ from mda_tui.widgets import (
 async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "translated_trajectory.xtc"
-    vector = np.asarray([10, 10, 10])
+    translate_by = 10
 
     async with app.run_test() as pilot:
         topology_reader_input = pilot.app.query_one(TopologyReaderSelector).query_one(Input)
@@ -38,16 +38,16 @@ async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Pa
         trajectory_reader_input.value = xtc.as_posix()
         trajectory_writer_output.value = xtc_output.as_posix()
         transformation_selector_input.value = translate_transformation
-        translate_transformation.query_one("#translate_x", Input).value = str(vector[0])
-        translate_transformation.query_one("#translate_y", Input).value = str(vector[1])
-        translate_transformation.query_one("#translate_z", Input).value = str(vector[2])
+        translate_transformation.query_one("#translate_x", Input).value = str(translate_by)
+        translate_transformation.query_one("#translate_y", Input).value = str(translate_by)
+        translate_transformation.query_one("#translate_z", Input).value = str(translate_by)
 
         pilot.app.run_transformation()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     u_translated = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
     diff = (u.trajectory.timeseries() - u_translated.trajectory.timeseries()).flatten()
-    assert_allclose(np.abs(diff), vector)
+    assert_allclose(np.abs(diff), translate_by, atol=1e-5)
 
 
 @pytest.mark.asyncio()
@@ -78,5 +78,5 @@ async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathli
     u_centered = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
     box = u.dimensions[:3]
     with pytest.raises(AssertionError):
-        assert_allclose(box / 2, u.atoms.positions[0])
-    assert_allclose(box / 2, u_centered.atoms.positions[0])
+        assert_allclose(box / 2, np.mean(u.atoms.positions, axis=0))
+    assert_allclose(box / 2, np.mean(u_centered.atoms.positions, axis=0))
