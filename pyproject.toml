@@ -71,7 +71,7 @@ write_to = "src/mda_tui/_version.py"
 
 [tool.check-manifest]
 ignore = [
-    "src/mda-tui/_version.py",
+    "src/mda_tui/_version.py",
 ]
 
 [tool.pytest.ini_options]

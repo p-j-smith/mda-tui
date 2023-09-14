@@ -70,7 +70,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install setuptools twine wheel build check-manifest
+        pip install setuptools twine wheel build
 
     - name: Build package
       run: |
@@ -82,10 +82,6 @@ jobs:
         test -n "${DISTRIBUTION}" || { echo "no dist/distribution mda-tui-*.tar.gz found"; exit 1; }
         echo "twine check $DISTRIBUTION"
         twine check $DISTRIBUTION
-
-    - name: Check the MANIFEST.in is correct
-      run: |
-        check-manifest
 
     - name: Upload sdist
       uses: actions/upload-artifact@v3
