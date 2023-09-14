@@ -80,3 +80,34 @@ async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathli
     with pytest.raises(AssertionError):
         assert_allclose(box / 2, np.mean(u.atoms.positions, axis=0))
     assert_allclose(box / 2, np.mean(u_centered.atoms.positions, axis=0))
+
+
+@pytest.mark.asyncio()
+async def test_wrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
+    pdb, xtc = universe_filenames
+    xtc_output = xtc.parent / "wrapped_trajectory.xtc"
+    ag = "all"
+
+    async with app.run_test() as pilot:
+        topology_reader_input = pilot.app.query_one(TopologyReaderSelector).query_one(Input)
+        trajectory_reader_input = pilot.app.query_one(TrajectoryReaderSelector).query_one(Input)
+        trajectory_writer_output = pilot.app.query_one(TrajectoryWriterSelector).query_one(Input)
+        transformation_selector_input = pilot.app.query_one(TransformationSelector).query_one(
+            "#transformation",
+            Select,
+        )
+        wrap_transformation = pilot.app.query_one(transformations.Wrap)
+
+        topology_reader_input.value = pdb.as_posix()
+        trajectory_reader_input.value = xtc.as_posix()
+        trajectory_writer_output.value = xtc_output.as_posix()
+        transformation_selector_input.value = wrap_transformation
+        wrap_transformation.query_one("#ag", Input).value = ag
+
+        pilot.app.run_transformation()
+
+    u = mda.Universe(pdb.as_posix(), xtc.as_posix())
+    u_wrapped = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
+    with pytest.raises(AssertionError):
+        assert_allclose(u.atoms.wrap(inplace=False), u.atoms.positions)
+    assert_allclose(u.atoms.wrap(inplace=False), u_wrapped.atoms.positions)
