@@ -29,13 +29,20 @@ def universe_filenames(tmp_path_factory):
     `tmp_path` has function-level scope.
     """
     n_atoms = 2
-    n_frames = 1
+    n_frames = 2
     u = mda.Universe.empty(n_atoms, trajectory=True)
     coordinates = np.empty((n_frames, u.atoms.n_atoms, 3))
     coordinates[0] = np.asarray(
         [
             [2, 2, 2],
             [11, 11, 11],  # outside the unit cell
+        ],
+    )
+    # both atoms move -3 in each dimension and cross periodic boundaries
+    coordinates[1] = np.asarray(
+        [
+            [9, 9, 9],
+            [-2, -2, -2],
         ],
     )
     u.load_new(coordinates, order="fac")

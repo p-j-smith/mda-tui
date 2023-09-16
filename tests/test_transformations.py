@@ -145,3 +145,35 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
     u_unwrapped = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
     atom_1_position, atom_2_position = u_unwrapped.bonds[0].atoms.positions
     assert all(np.abs(atom_1_position - atom_2_position) < (u_unwrapped.dimensions[:3] / 2))
+
+
+@pytest.mark.asyncio()
+async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
+    pdb, xtc = universe_filenames
+    xtc_output = xtc.parent / "nojump_trajectory.xtc"
+
+    async with app.run_test() as pilot:
+        topology_reader_input = pilot.app.query_one(TopologyReaderSelector).query_one(Input)
+        trajectory_reader_input = pilot.app.query_one(TrajectoryReaderSelector).query_one(Input)
+        trajectory_writer_output = pilot.app.query_one(TrajectoryWriterSelector).query_one(Input)
+        transformation_selector_input = pilot.app.query_one(TransformationSelector).query_one(
+            "#transformation",
+            Select,
+        )
+        nojump_transformation = pilot.app.query_one(transformations.NoJump)
+
+        topology_reader_input.value = pdb.as_posix()
+        trajectory_reader_input.value = xtc.as_posix()
+        trajectory_writer_output.value = xtc_output.as_posix()
+        transformation_selector_input.value = nojump_transformation
+
+        pilot.app.run_transformation()
+
+    u = mda.Universe(pdb.as_posix(), xtc.as_posix())
+    distances_moved = np.diff(u.trajectory.timeseries(), axis=0)
+    with pytest.raises(AssertionError):
+        assert np.all(np.abs(distances_moved) < (u.dimensions[:3] / 2))
+
+    u_nojump = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
+    distances_moved = np.diff(u_nojump.trajectory.timeseries(), axis=0)
+    assert np.all(np.abs(distances_moved) < (u_nojump.dimensions[:3] / 2))
