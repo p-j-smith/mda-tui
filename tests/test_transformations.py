@@ -111,3 +111,37 @@ async def test_wrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     with pytest.raises(AssertionError):
         assert_allclose(u.atoms.wrap(inplace=False), u.atoms.positions)
     assert_allclose(u.atoms.wrap(inplace=False), u_wrapped.atoms.positions)
+
+
+@pytest.mark.asyncio()
+async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
+    pdb, xtc = universe_filenames
+    xtc_output = xtc.parent / "unwrapped_trajectory.xtc"
+    ag = "all"
+
+    async with app.run_test() as pilot:
+        topology_reader_input = pilot.app.query_one(TopologyReaderSelector).query_one(Input)
+        trajectory_reader_input = pilot.app.query_one(TrajectoryReaderSelector).query_one(Input)
+        trajectory_writer_output = pilot.app.query_one(TrajectoryWriterSelector).query_one(Input)
+        transformation_selector_input = pilot.app.query_one(TransformationSelector).query_one(
+            "#transformation",
+            Select,
+        )
+        unwrap_transformation = pilot.app.query_one(transformations.Unwrap)
+
+        topology_reader_input.value = pdb.as_posix()
+        trajectory_reader_input.value = xtc.as_posix()
+        trajectory_writer_output.value = xtc_output.as_posix()
+        transformation_selector_input.value = unwrap_transformation
+        unwrap_transformation.query_one("#ag", Input).value = ag
+
+        pilot.app.run_transformation()
+
+    u = mda.Universe(pdb.as_posix(), xtc.as_posix())
+    atom_1_position, atom_2_position = u.bonds[0].atoms.positions
+    with pytest.raises(AssertionError):
+        assert all(np.abs(atom_1_position - atom_2_position) < (u.dimensions[:3] / 2))
+
+    u_unwrapped = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
+    atom_1_position, atom_2_position = u_unwrapped.bonds[0].atoms.positions
+    assert all(np.abs(atom_1_position - atom_2_position) < (u_unwrapped.dimensions[:3] / 2))
