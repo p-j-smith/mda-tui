@@ -1,5 +1,6 @@
 from MDAnalysis import Universe
 from MDAnalysis.transformations import (
+    NoJump as nojump,
     TransformationBase,
     center_in_box,
     translate,
@@ -51,12 +52,14 @@ class TransformationSelector(Vertical):
         center_in_box = CenterInBox(id=CenterInBox.id)
         wrap = Wrap(id=Wrap.id)
         unwrap = Unwrap(id=Unwrap.id)
+        nojump = NoJump(id=NoJump.id)
 
         options = [
             (translate.description, translate),
             (center_in_box.description, center_in_box),
             (wrap.description, wrap),
             (unwrap.description, unwrap),
+            (nojump.description, nojump),
         ]
         select: Select[TransformationBase] = Select(
             options=options,
@@ -70,6 +73,7 @@ class TransformationSelector(Vertical):
             yield center_in_box
             yield wrap
             yield unwrap
+            yield nojump
 
     @on(Select.Changed, "#transformation")
     def select_transformation(self, event) -> None:
@@ -347,6 +351,40 @@ class Unwrap(Vertical):
         """Initialise the transformation for a given universe"""
         ag = universe.select_atoms(self.selection)
         return self.transformation(ag=ag)
+
+    def validate(self):
+        return [widget.validate(widget.value) for widget in self.query(Input)]
+
+
+class NoJump(Vertical):
+    """Widgets for setting parameters for nojump transformation"""
+
+    description = "Prevent jumps across periodic boundaries"
+    transformation = nojump
+    id = str(nojump).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+
+    def compose(self) -> ComposeResult:
+        """Create layout of parameter widgets"""
+
+        check_continuity = Switch()
+
+        # Define tooltips
+        check_continuity_tooltip = "check the trajectory step size is not more than 1"
+
+        yield WidgetWithLabel(
+            label="check continuity",
+            widget=check_continuity,
+            id="check_continuity",
+            tooltip=check_continuity_tooltip,
+        )
+
+    @property
+    def check_continuity(self):
+        return self.query_one(Switch).value
+
+    def setup_transformation(self, universe: Universe):  # noqa: ARG002
+        """Initialise the transformation for a given universe"""
+        return self.transformation(check_continuity=self.check_continuity)
 
     def validate(self):
         return [widget.validate(widget.value) for widget in self.query(Input)]
