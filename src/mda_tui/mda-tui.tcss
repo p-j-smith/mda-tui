@@ -97,3 +97,10 @@ TransformationSelector ContentSwitcher Wrap {
     margin: 0;
     height: auto;
 }
+
+TransformationSelector ContentSwitcher Unwrap {
+    width: 1fr;
+    padding: 0;
+    margin: 0;
+    height: auto;
+}

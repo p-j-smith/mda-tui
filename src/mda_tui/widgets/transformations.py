@@ -3,6 +3,7 @@ from MDAnalysis.transformations import (
     TransformationBase,
     center_in_box,
     translate,
+    unwrap,
     wrap,
 )
 from textual import on
@@ -49,11 +50,13 @@ class TransformationSelector(Vertical):
         translate = Translate(id=Translate.id)
         center_in_box = CenterInBox(id=CenterInBox.id)
         wrap = Wrap(id=Wrap.id)
+        unwrap = Unwrap(id=Unwrap.id)
 
         options = [
             (translate.description, translate),
             (center_in_box.description, center_in_box),
             (wrap.description, wrap),
+            (unwrap.description, unwrap),
         ]
         select: Select[TransformationBase] = Select(
             options=options,
@@ -66,6 +69,7 @@ class TransformationSelector(Vertical):
             yield translate
             yield center_in_box
             yield wrap
+            yield unwrap
 
     @on(Select.Changed, "#transformation")
     def select_transformation(self, event) -> None:
@@ -305,6 +309,44 @@ class Wrap(Vertical):
         """Initialise the transformation for a given universe"""
         ag = universe.select_atoms(self.selection)
         return self.transformation(ag=ag, compound=self.compound)
+
+    def validate(self):
+        return [widget.validate(widget.value) for widget in self.query(Input)]
+
+
+class Unwrap(Vertical):
+    """Widgets for setting parameters for the unwrap transformation"""
+
+    description = "Unwrap an atom group"
+    transformation = unwrap
+    id = str(unwrap).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+
+    def compose(self) -> ComposeResult:
+        """Create layout of parameter widgets"""
+
+        ag = Input(
+            placeholder="atom selection",
+            validators=AtomSelectionValidator(
+                failure_description="invalid atom selection",
+            ),
+            id="ag",
+        )
+
+        # define tooltips
+        ag_tooltip = "selection string for atom group to be unwrapped into the unit cell. If empty, all fragments will be unwrapped."
+
+        yield WidgetWithLabel(label="ag", widget=ag, id="unwrap_ag", tooltip=ag_tooltip)
+
+    @property
+    def selection(self):
+        sel = self.query_one("#ag", Input).value
+        sel = sel if sel else "all"
+        return sel
+
+    def setup_transformation(self, universe: Universe):
+        """Initialise the transformation for a given universe"""
+        ag = universe.select_atoms(self.selection)
+        return self.transformation(ag=ag)
 
     def validate(self):
         return [widget.validate(widget.value) for widget in self.query(Input)]
