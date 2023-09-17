@@ -8,6 +8,7 @@ import pytest
 from textual.widgets import (
     Input,
     Select,
+    Switch,
 )
 
 from mda_tui.widgets import (
@@ -153,6 +154,7 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
 @pytest.mark.xfail(
     mda.__version__ not in mda_min_version,
     reason="bug in NoJump transformation is fixed in MDAnalysis >2.6.1",
+    strict=True,
 )
 @pytest.mark.asyncio()
 async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
@@ -168,6 +170,7 @@ async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
             Select,
         )
         nojump_transformation = pilot.app.query_one(transformations.NoJump)
+        nojump_transformation.query_one(Switch).value = True
 
         topology_reader_input.value = pdb.as_posix()
         trajectory_reader_input.value = xtc.as_posix()

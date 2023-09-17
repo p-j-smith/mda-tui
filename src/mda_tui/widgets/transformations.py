@@ -366,7 +366,7 @@ class NoJump(Vertical):
     def compose(self) -> ComposeResult:
         """Create layout of parameter widgets"""
 
-        check_continuity = Switch()
+        check_continuity = Switch(value=True)
 
         # Define tooltips
         check_continuity_tooltip = "check the trajectory step size is not more than 1"
