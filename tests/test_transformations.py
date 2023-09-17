@@ -3,6 +3,7 @@ import pathlib
 import MDAnalysis as mda
 import numpy as np
 from numpy.testing import assert_allclose
+from packaging.specifiers import SpecifierSet
 import pytest
 from textual.widgets import (
     Input,
@@ -16,6 +17,8 @@ from mda_tui.widgets import (
     TransformationSelector,
     transformations,
 )
+
+mda_min_version = SpecifierSet(">2.6.1")
 
 
 @pytest.mark.asyncio()
@@ -147,6 +150,10 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
     assert all(np.abs(atom_1_position - atom_2_position) < (u_unwrapped.dimensions[:3] / 2))
 
 
+@pytest.mark.xfail(
+    mda.__version__ not in mda_min_version,
+    reason="bug in NoJump transformation is fixed in MDAnalysis >2.6.1",
+)
 @pytest.mark.asyncio()
 async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
