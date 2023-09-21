@@ -36,6 +36,16 @@ The rules for this file:
 ### Removed
 <!-- Removed features -->
 
+## [0.2.0] - 2023-09-21
+
+### Authors
+<!-- GitHub usernames of contributors to this release -->
+p-j-smith
+
+### Added
+<!-- New added features -->
+- added nojump, wrap, and unwrap transformations
+
 ## [0.1.1] - 2023-09-11
 
 ### Authors
@@ -46,10 +56,6 @@ p-j-smtih
 <!-- Bug fixes -->
 - fix version number of wheels uploaded to PyPI
 
-### Changed
-<!-- Changes in existing functionality -->
-- use setuptools-scm to manage versioning
-
 ## [0.1.0] - 2023-09-11
 
 ### Authors
@@ -58,6 +64,5 @@ p-j-smtih
 
 ### Added
 <!-- New added features -->
-- first relase of mda-tui
-- includes transformations for translating atom groups or centering
-them in a box
+- first relase of mda-tui - includes transformations for translating
+atom groups or centering them in a box
