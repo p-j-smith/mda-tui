@@ -1,19 +1,15 @@
 #run {
-    width: 1fr;
-    height: 1fr;
     margin: 0;
+    height: 3;
     padding: 0 3 0 1;
-    align: center top;
 }
 
 #run Input {
     width: 1fr;
-    height: 3;
 }
 
 #run Button {
     width: 1fr;
-    height: 3;
 }
 
 FileSelector {
