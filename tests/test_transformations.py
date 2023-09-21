@@ -19,7 +19,7 @@ from mda_tui.widgets import (
     transformations,
 )
 
-mda_min_version = SpecifierSet(">2.6.1")
+mda_supported_versions = SpecifierSet(">2.6.1", prereleases=True)
 
 
 @pytest.mark.asyncio()
@@ -152,7 +152,7 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
 
 
 @pytest.mark.xfail(
-    mda.__version__ not in mda_min_version,
+    mda.__version__ not in mda_supported_versions,
     reason="bug in NoJump transformation is fixed in MDAnalysis >2.6.1",
     strict=True,
 )
