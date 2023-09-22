@@ -133,7 +133,7 @@ class MDA(App):
         self._run_transformation(u, start, stop, step, output_trajectory)
 
     @work(exclusive=True, thread=True)
-    async def _run_transformation(self, u, start, stop, step, output_trajectory):
+    def _run_transformation(self, u, start, stop, step, output_trajectory):
         with mda.Writer(output_trajectory.as_posix()) as f:
             for _ in u.trajectory[start:stop:step]:
                 f.write(u.atoms)
