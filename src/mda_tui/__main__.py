@@ -1,11 +1,13 @@
 import pathlib
 
 import MDAnalysis as mda
-from textual import on
+import numpy as np
+from textual import on, work
 from textual.app import App, ComposeResult
 from textual.widgets import (
     Button,
     Header,
+    ProgressBar,
     Select,
     TabbedContent,
     TabPane,
@@ -71,7 +73,7 @@ class MDA(App):
         )
 
     @on(Button.Pressed, "MDARun #run-button")
-    def run_transformation(self) -> None:
+    async def run_transformation(self) -> None:
         """Perform the transformation"""
 
         # Validate input
@@ -123,15 +125,30 @@ class MDA(App):
         u.trajectory.add_transformations(transformation)
 
         # Write transformed trajectory
-        (start, stop, step) = self.query_one(MDARun).slice
+        (start, stop, step) = u.trajectory.check_slice_indices(*self.query_one(MDARun).slice)
         output_trajectory: pathlib.Path = self.query_one(TrajectoryWriterSelector).file
         output_trajectory.parent.mkdir(parents=True, exist_ok=True)
-        with mda.Writer(output_trajectory.as_posix()) as f:
-            # TODO: show a progress bar
-            for _ts in u.trajectory[start:stop:step]:
-                f.write(u.atoms)
 
+        await self.mount(ProgressBar(np.arange(start, stop, step).size, id="pbar"))
+        self._run_transformation(u, start, stop, step, output_trajectory)
+
+    @work(exclusive=True, thread=True)
+    async def _run_transformation(self, u, start, stop, step, output_trajectory):
+        with mda.Writer(output_trajectory.as_posix()) as f:
+            for _ in u.trajectory[start:stop:step]:
+                f.write(u.atoms)
+                self.call_from_thread(self._update_progressbar)
+
+    def _update_progressbar(self):
+        self.query_one(ProgressBar).advance(1)
+
+    async def on_worker_state_changed(self, event) -> None:
+        """Delete the progress bar once the worker has finished."""
+        if not event.worker.is_finished:
+            return
+        output_trajectory = event.worker._work.args[-1]
         self.notify(f"Finished writing transfomed trajectory to {output_trajectory}", timeout=20)
+        await self.query_one(ProgressBar).remove()
 
 
 def main():

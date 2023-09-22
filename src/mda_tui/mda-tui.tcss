@@ -100,3 +100,9 @@ TransformationSelector ContentSwitcher Unwrap {
     margin: 0;
     height: auto;
 }
+
+ProgressBar {
+    width: 1fr;
+    height: 5;
+    align: center middle;
+}

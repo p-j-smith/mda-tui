@@ -46,7 +46,8 @@ async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Pa
         translate_transformation.query_one("#translate_y", Input).value = str(translate_by)
         translate_transformation.query_one("#translate_z", Input).value = str(translate_by)
 
-        pilot.app.run_transformation()
+        await pilot.app.run_transformation()
+        await pilot.app.workers.wait_for_complete()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     u_translated = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
@@ -76,7 +77,8 @@ async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathli
         transformation_selector_input.value = center_transformation
         center_transformation.query_one("#ag", Input).value = ag
 
-        pilot.app.run_transformation()
+        await pilot.app.run_transformation()
+        await pilot.app.workers.wait_for_complete()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     u_centered = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
@@ -108,7 +110,8 @@ async def test_wrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
         transformation_selector_input.value = wrap_transformation
         wrap_transformation.query_one("#ag", Input).value = ag
 
-        pilot.app.run_transformation()
+        await pilot.app.run_transformation()
+        await pilot.app.workers.wait_for_complete()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     u_wrapped = mda.Universe(pdb.as_posix(), xtc_output.as_posix())
@@ -139,7 +142,8 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
         transformation_selector_input.value = unwrap_transformation
         unwrap_transformation.query_one("#ag", Input).value = ag
 
-        pilot.app.run_transformation()
+        await pilot.app.run_transformation()
+        await pilot.app.workers.wait_for_complete()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     atom_1_position, atom_2_position = u.bonds[0].atoms.positions
@@ -177,7 +181,8 @@ async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
         trajectory_writer_output.value = xtc_output.as_posix()
         transformation_selector_input.value = nojump_transformation
 
-        pilot.app.run_transformation()
+        await pilot.app.run_transformation()
+        await pilot.app.workers.wait_for_complete()
 
     u = mda.Universe(pdb.as_posix(), xtc.as_posix())
     distances_moved = np.diff(u.trajectory.timeseries(), axis=0)
