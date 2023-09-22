@@ -36,6 +36,21 @@ The rules for this file:
 ### Removed
 <!-- Removed features -->
 
+## [0.3.0] - 2023-09-22
+
+### Authors
+<!-- GitHub usernames of contributors to this release -->
+p-j-smith
+
+### Added
+<!-- New added features -->
+- display a progress bar when writing the trajectory to file
+
+### Changed
+<!-- Changes in existing functionality -->
+- run the trajectory writing in a separate thread to avoid blocking the ui
+
+
 ## [0.2.0] - 2023-09-21
 
 ### Authors
