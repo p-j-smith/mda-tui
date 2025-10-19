@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, ClassVar
+from typing import ClassVar, TypeAlias
 
 import MDAnalysis as mda
 from textual.app import ComposeResult
@@ -12,7 +13,6 @@ from textual.widgets import (
     Input,
 )
 import textual_fspicker
-from typing_extensions import TypeAlias
 
 from mda_tui.validators import (
     FileExtensionValidator,
