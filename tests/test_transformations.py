@@ -22,7 +22,7 @@ from mda_tui.widgets import (
 mda_supported_versions = SpecifierSet(">2.6.1", prereleases=True)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "translated_trajectory.xtc"
@@ -55,7 +55,7 @@ async def test_translate(app, universe_filenames: tuple[pathlib.Path, pathlib.Pa
     assert_allclose(np.abs(diff), translate_by, atol=1e-5)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "centered_trajectory.xtc"
@@ -88,7 +88,7 @@ async def test_center_in_box(app, universe_filenames: tuple[pathlib.Path, pathli
     assert_allclose(box / 2, np.mean(u_centered.atoms.positions, axis=0))
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_wrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "wrapped_trajectory.xtc"
@@ -120,7 +120,7 @@ async def test_wrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     assert_allclose(u.atoms.wrap(inplace=False), u_wrapped.atoms.positions)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "unwrapped_trajectory.xtc"
@@ -160,7 +160,7 @@ async def test_unwrap(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]
     reason="bug in NoJump transformation is fixed in MDAnalysis >2.6.1",
     strict=True,
 )
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_nojump(app, universe_filenames: tuple[pathlib.Path, pathlib.Path]):
     pdb, xtc = universe_filenames
     xtc_output = xtc.parent / "nojump_trajectory.xtc"

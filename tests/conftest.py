@@ -14,7 +14,7 @@ import pytest
 from mda_tui.__main__ import MDA
 
 
-@pytest.fixture()
+@pytest.fixture
 def app():
     return MDA()
 

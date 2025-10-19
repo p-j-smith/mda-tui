@@ -13,66 +13,26 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955  # v4
 
-      - name: Install python
-        uses: actions/setup-python@v4
+      - name: Setup uv
+        uses: astral-sh/setup-uv@3259c6206f993105e3a61b142c2d97bf4b9ef83d # v7
         with:
-          python-version: 3.x
+          python-version: "3.11"
+          enable-cache: true
+          cache-dependency-glob: |
+            **/pyproject.toml
+            **/uv.lock
+            **/.tox/**/*
+            **/mkdocs.yml
 
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - name: Build HTML documentation with tox
+        run: uv run mkdocs build
 
-      - uses: actions/cache@v3
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ".[doc]"
-
-      - name: Build docs
-        run: mkdocs build
-      - name: Upload static docs
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: site
-
-  deploy:
-    name: Pulish docs if a release was made
-    runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
-    needs: [build]
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-
-      - name: Install python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-
-      - uses: actions/cache@v3
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ".[doc]"
-
-      - name: Deploy to github pages
-        run: mkdocs gh-deploy --force
+      - name: Publish docs if a release was made
+        if: startsWith(github.ref, 'refs/tags/')
+        run:  uv run mkdocs gh-deploy --force

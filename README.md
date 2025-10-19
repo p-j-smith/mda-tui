@@ -34,55 +34,40 @@ MDanalysis TUI is alpha software and may change without warning.
 ## Installation
 
 When installing MDAnalysis TUI, we highly recommend using virtual environments.
-If possible, we strongly recommend that you use
-[Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) as your package manager.
+We recommend that you use
+[uv](https://docs.astral.sh/uv/getting-started/installation/) or
+[pixi](https://pixi.sh/latest/installation/)
+as your package manager.
 
-First ensure that you have [mamba](https://mamba.readthedocs.io/en/latest/index.html) installed.
+Assuming you're using `uv`, create and activate a new virtual environment with:
 
-Create a virtual environment and activate it:
-
-```
-mamba create --name mda-tui -c conda-forge python=3.10 pip
-mamba activate mda-tui
-```
-
-Then install MDAnalysis TUI:
-
-```
-python -m pip install mda-tui
+```sh
+uv venv --python=3.14
+source .venv/bin/activate
 ```
 
-And when you are finished, you can exit the virtual environment with:
+Then install MDAnalysis TUI with:
 
+```sh
+uv pip install mda_tui
 ```
-mamba deactivate
-```
-
-To use conda instead, replace all `mamba` commands with `conda`.
-
 
 ### Installation from source
 
 To build MDAnalysis TUI from source, follow the above steps for creating a virtual environment, clone this repository:
 
-```
+```sh
 git clone https://github.com/p-j-smith/mda-tui.git
 ```
 
 Then inside your virtual environment type:
 
-```
-python -m pip install .
+```sh
+uv sync
 ```
 
-If you want to create a development environment, you can
-install MDAnalysis TUI in editible mode along with
-the dependencies required for running tests and and building docs with
-the following command:
-
-```
-python -m pip install -e ".[dev]"
-```
+By default, this will install MDAnalysis TUI in editable mode along with the dependencies
+required for development (testing, linting, and building the documentation).
 
 ## Code of conduct
 
