@@ -61,6 +61,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
+          fetch-depth: 0
           fetch-tags: true
 
 
@@ -74,7 +75,7 @@ jobs:
             **/uv.lock
 
       - name: Build package
-        run: uv run --with build python -m build .
+        run: uv build
 
       - name: Check package with Twine
         run: uv run --with twine twine check dist/*
