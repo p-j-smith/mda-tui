@@ -803,7 +803,7 @@ wheels = [
 
 [[package]]
 name = "mda-tui"
-version = "0.3.1.dev9"
+version = "0.3.1.dev14"
 source = { editable = "." }
 dependencies = [
     { name = "mdanalysis" },

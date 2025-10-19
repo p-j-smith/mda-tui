@@ -71,7 +71,7 @@ jobs:
             **/uv.lock
 
       - name: Build package
-        run: uv build
+        run: uv run --with build python -m build .
 
       - name: Check package with Twine
         run: uv run --with twine twine check dist/*
