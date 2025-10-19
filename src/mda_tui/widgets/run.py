@@ -56,7 +56,7 @@ class MDARun(Horizontal):
             return
 
     @property
-    def slice(self) -> tuple[int | None, int | None, int | None]:  # noqa:  A003
+    def slice(self) -> tuple[int | None, int | None, int | None]:
         """Get the start, stop, and step values as integers or None"""
 
         start = self.query_one("#start", Input).value

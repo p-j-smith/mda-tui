@@ -223,7 +223,7 @@ pep8-naming.classmethod-decorators = [
 [tool.black]
 extend-exclude = "version"
 line-length = 100
-target-version = ["py11", "py312", "py313", "py314"]
+target-version = ["py311", "py312", "py313", "py314"]
 
 [tool.ruff.isort]
 force-single-line = false
