@@ -86,7 +86,7 @@ class Translate(Vertical):
 
     description = "Translate coordinates by a given vector"
     transformation = translate
-    id = str(translate).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+    id = str(translate).removeprefix("<class '").removesuffix("'>").replace(".", "_")  # noqa: A003
 
     def compose(self) -> ComposeResult:
         """Create layout of parameter widgets"""
@@ -148,7 +148,7 @@ class CenterInBox(Vertical):
 
     description = "Center atoms / molecules"
     transformation = center_in_box
-    id = str(center_in_box).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+    id = str(center_in_box).removeprefix("<class '").removesuffix("'>").replace(".", "_")  # noqa: A003
 
     def compose(self) -> ComposeResult:
         """Create layout of parameter widgets"""
@@ -251,7 +251,7 @@ class Wrap(Vertical):
 
     description = "Wrap atoms into the unit cell"
     transformation = wrap
-    id = str(wrap).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+    id = str(wrap).removeprefix("<class '").removesuffix("'>").replace(".", "_")  # noqa: A003
 
     """
     ag: Atomgroup
@@ -323,7 +323,7 @@ class Unwrap(Vertical):
 
     description = "Unwrap an atom group"
     transformation = unwrap
-    id = str(unwrap).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+    id = str(unwrap).removeprefix("<class '").removesuffix("'>").replace(".", "_")  # noqa: A003
 
     def compose(self) -> ComposeResult:
         """Create layout of parameter widgets"""
@@ -361,7 +361,7 @@ class NoJump(Vertical):
 
     description = "Prevent jumps across periodic boundaries"
     transformation = nojump
-    id = str(nojump).removeprefix("<class '").removesuffix("'>")  # noqa: A003
+    id = str(nojump).removeprefix("<class '").removesuffix("'>").replace(".", "_")  # noqa: A003
 
     def compose(self) -> ComposeResult:
         """Create layout of parameter widgets"""
